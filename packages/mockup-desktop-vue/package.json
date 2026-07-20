@@ -45,26 +45,26 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "peerDependencies": {
-    "@vueuse/core": "^14.2.1",
-    "reka-ui": "^2.6.1",
-    "vue": "^3.5.26",
-    "vue-router": "^4.6.4"
+    "@vueuse/core": "catalog:",
+    "reka-ui": "catalog:",
+    "vue": "catalog:",
+    "vue-router": "catalog:"
   },
   "dependencies": {
     "@vishot/core": "workspace:*"
   },
   "devDependencies": {
-    "@histoire/plugin-vue": "1.0.0-beta.1",
-    "@unocss/reset": "^66.6.8",
-    "@vitejs/plugin-vue": "^6.0.6",
-    "@vueuse/core": "^14.2.1",
-    "histoire": "1.0.0-beta.1",
-    "reka-ui": "^2.6.1",
-    "unocss": "^66.6.8",
-    "vite": "^7.2.7",
-    "vitest-browser-vue": "^2.1.0",
-    "vue": "^3.5.26",
-    "vue-router": "^4.6.4",
-    "vue-tsc": "^3.1.8"
+    "@histoire/plugin-vue": "catalog:",
+    "@unocss/reset": "catalog:",
+    "@vitejs/plugin-vue": "catalog:",
+    "@vueuse/core": "catalog:",
+    "histoire": "catalog:",
+    "reka-ui": "catalog:",
+    "unocss": "catalog:",
+    "vite": "catalog:",
+    "vitest-browser-vue": "catalog:",
+    "vue": "catalog:",
+    "vue-router": "catalog:",
+    "vue-tsc": "catalog:"
   }
 }

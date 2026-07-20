@@ -27,13 +27,13 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@moeru/std": "^0.1.0-beta.17",
-    "@napi-rs/image": "^1.12.0",
+    "@moeru/std": "catalog:",
+    "@napi-rs/image": "catalog:",
     "@vishot/core": "workspace:*",
-    "meow": "^13.2.0",
-    "playwright": "^1.57.0"
+    "meow": "catalog:",
+    "playwright": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "^24.12.2"
+    "@types/node": "catalog:"
   }
 }
