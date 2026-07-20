@@ -1,0 +1,44 @@
+name: Feature proposal
+description: Propose a new Vishot feature.
+type: Feature
+labels: [pending triage, feature]
+body:
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Problem
+      description: What are you trying to do, and what is missing today?
+    validations:
+      required: true
+  - type: textarea
+    id: suggested-solution
+    attributes:
+      label: Suggested solution
+      description: Describe the API, package, or workflow shape you have in mind.
+  - type: dropdown
+    id: affected-package
+    attributes:
+      label: Related package
+      options:
+        - '@vishot/core'
+        - '@vishot/source-electron'
+        - '@vishot/renderer-browser'
+        - '@vishot/mockup-desktop-vue'
+        - New package
+        - Unsure
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: Alternatives considered, if any.
+  - type: checkboxes
+    id: checkboxes
+    attributes:
+      label: Validations
+      options:
+        - label: I have read the Code of Conduct.
+          required: true
+        - label: I have checked for existing feature requests.
+          required: true

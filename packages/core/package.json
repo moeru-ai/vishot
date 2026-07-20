@@ -1,0 +1,41 @@
+{
+  "name": "@vishot/core",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "Shared Vishot capture contracts and artifact helpers.",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./artifacts": {
+      "types": "./dist/artifacts.d.mts",
+      "import": "./dist/artifacts.mjs"
+    },
+    "./files": {
+      "types": "./dist/files.d.mts",
+      "import": "./dist/files.mjs"
+    },
+    "./ready": {
+      "types": "./dist/ready.d.mts",
+      "import": "./dist/ready.mjs"
+    },
+    "./selectors": {
+      "types": "./dist/selectors.d.mts",
+      "import": "./dist/selectors.mjs"
+    }
+  },
+  "types": "./dist/index.d.mts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "test:run": "vitest run",
+    "typecheck": "tsc --noEmit"
+  }
+}

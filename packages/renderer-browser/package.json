@@ -1,0 +1,39 @@
+{
+  "name": "@vishot/renderer-browser",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "Playwright browser renderer for Vishot capture roots.",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "types": "./dist/index.d.mts",
+  "bin": {
+    "vishot-renderer-browser": "./dist/cli/capture.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "capture": "tsx src/cli/capture.ts",
+    "test:run": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@moeru/std": "^0.1.0-beta.17",
+    "@vishot/core": "workspace:*",
+    "meow": "^13.2.0",
+    "playwright": "^1.57.0",
+    "vite": "^7.2.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24.12.2"
+  }
+}

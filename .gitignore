@@ -1,0 +1,54 @@
+.Trash/
+.trash/
+.DS_Store
+
+# Node.js
+node_modules
+
+# Logs
+*.log
+*.logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+.idea
+.temp
+**/temp/
+
+# AI agents
+.claude/worktrees/
+.superpowers/
+
+# Local env
+*.local
+*.local.*
+.env
+.env.*
+!.env.example
+
+# Test coverage
+coverage/
+
+# Build output
+dist
+out/
+bundle/
+
+# Vite / Histoire
+.histoire
+.vite-inspect
+.vite-inspect*
+
+# TypeScript / cache
+.eslintcache
+**/.cache/
+**/*.tsbuildinfo
+
+# Turborepo
+.turbo
+
+# Tool state
+.ghfs/
+.playwright-mcp/

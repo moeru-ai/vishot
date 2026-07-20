@@ -1,0 +1,70 @@
+{
+  "name": "@vishot/mockup-desktop-vue",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "Vue capture canvas and desktop mockup components for Vishot.",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components.js"
+    },
+    "./composables": {
+      "types": "./dist/composables/index.d.ts",
+      "import": "./dist/composables.js"
+    },
+    "./macos": {
+      "types": "./dist/platforms/macos/index.d.ts",
+      "import": "./dist/macos.js"
+    },
+    "./windows": {
+      "types": "./dist/platforms/windows/index.d.ts",
+      "import": "./dist/windows.js"
+    },
+    "./runtime/scene-canvas": {
+      "types": "./dist/runtime/scene-canvas.d.ts",
+      "import": "./dist/runtime/scene-canvas.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\" && vite build && vue-tsc -p tsconfig.build.json",
+    "story:dev": "histoire dev",
+    "story:build": "histoire build",
+    "test:run": "vitest run",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@vueuse/core": "^14.2.1",
+    "reka-ui": "^2.6.1",
+    "vue": "^3.5.26",
+    "vue-router": "^4.6.4"
+  },
+  "dependencies": {
+    "@vishot/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@histoire/plugin-vue": "1.0.0-beta.1",
+    "@unocss/reset": "^66.6.8",
+    "@vitejs/plugin-vue": "^6.0.6",
+    "@vueuse/core": "^14.2.1",
+    "histoire": "1.0.0-beta.1",
+    "reka-ui": "^2.6.1",
+    "unocss": "^66.6.8",
+    "vite": "^7.2.7",
+    "vitest-browser-vue": "^2.1.0",
+    "vue": "^3.5.26",
+    "vue-router": "^4.6.4",
+    "vue-tsc": "^3.1.8"
+  }
+}

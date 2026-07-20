@@ -1,0 +1,19 @@
+name: Copilot Setup Steps
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install gh-aw extension
+        uses: github/gh-aw-actions/setup-cli@73ae9ce231580f337133352d321d42b6bf54b6a9 # v0.66.1
+        with:
+          version: v0.66.1

@@ -1,0 +1,48 @@
+- name: bug
+  description: Something is not working
+  color: d73a4a
+- name: dependencies
+  description: Pull requests that update dependencies
+  color: 0366d6
+- name: documentation
+  description: Documentation improvements
+  color: 4468eb
+- name: duplicate
+  description: This issue or pull request already exists
+  color: cfd3d7
+- name: feature
+  description: New feature or enhancement
+  color: dbf2a8
+- name: good first issue
+  description: Good for newcomers
+  color: 7057ff
+- name: help wanted
+  description: Extra attention is needed
+  color: 008672
+- name: invalid
+  description: This does not seem right
+  color: e4e669
+- name: package/core
+  description: Shared Vishot contracts and helpers
+  color: b8d5ff
+- name: package/mockup-desktop-vue
+  description: Vue desktop mockup components
+  color: a1f7ef
+- name: package/renderer-browser
+  description: Browser final image renderer
+  color: abedff
+- name: package/source-electron
+  description: Electron screenshot source adapter
+  color: bee2cc
+- name: pending triage
+  description: Not yet confirmed
+  color: f9d0c4
+- name: question
+  description: Further information is requested
+  color: d876e3
+- name: security
+  description: Security issue, pull request, or advisory
+  color: fdf122
+- name: wontfix
+  description: This will not be worked on
+  color: ffffff

@@ -1,0 +1,8 @@
+export { parseCaptureCliArguments } from './cli/capture'
+export { capturePage } from './runtime/capture'
+export { createScenarioContext } from './runtime/context'
+export { defineScenario } from './runtime/define-scenario'
+export { loadScenarioModule } from './runtime/load-scenario'
+export type { CaptureOptions, ElectronScenario, ScenarioContext } from './runtime/types'
+export { applyArtifactTransformers, createImageArtifact } from '@vishot/core'
+export type { ArtifactTransformer, VishotArtifact, VishotArtifactKind, VishotArtifactStage } from '@vishot/core'

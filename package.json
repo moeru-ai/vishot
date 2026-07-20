@@ -1,0 +1,47 @@
+{
+  "name": "vishot-workspace",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "description": "Composable screenshot sources, browser renderers, and desktop mockup components.",
+  "author": {
+    "name": "Moeru AI",
+    "url": "https://github.com/moeru-ai"
+  },
+  "license": "MIT",
+  "scripts": {
+    "alint": "alint",
+    "build": "pnpm -r build",
+    "dev:mockup": "pnpm -F @vishot/mockup-desktop-vue story:dev",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "release": "bumpp",
+    "test": "pnpm -r --parallel test:run",
+    "typecheck": "pnpm -r --parallel typecheck"
+  },
+  "devDependencies": {
+    "@alint-js/cli": "link:../alint/packages/cli",
+    "@alint-js/config": "link:../alint/packages/config",
+    "@alint-js/core": "link:../alint/packages/core",
+    "@alint-js/plugin-js": "link:../alint/packages/plugin-js",
+    "@alint-js/tools-fs": "link:../alint/packages/tools-fs",
+    "@antfu/eslint-config": "^8.2.0",
+    "@histoire/plugin-vue": "1.0.0-beta.1",
+    "@types/node": "^24.12.2",
+    "@unocss/preset-web-fonts": "^66.6.8",
+    "@vitejs/plugin-vue": "^6.0.6",
+    "bumpp": "^10.2.3",
+    "eslint": "^9.39.2",
+    "histoire": "1.0.0-beta.1",
+    "tinyexec": "^1.0.2",
+    "tsdown": "^0.22.12",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "unocss": "^66.6.8",
+    "vite": "^7.2.7",
+    "vitest": "^4.0.16",
+    "vitest-browser-vue": "^2.1.0",
+    "vue-tsc": "^3.1.8"
+  }
+}

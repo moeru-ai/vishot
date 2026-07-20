@@ -1,0 +1,50 @@
+name: Bug report
+description: Report something that is not working in Vishot.
+type: Bug
+labels: [pending triage, bug]
+body:
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of the bug.
+      placeholder: Bug description
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Minimal steps, repository, or code sample that reproduces the issue.
+    validations:
+      required: true
+  - type: textarea
+    id: system-info
+    attributes:
+      label: System Info
+      description: Output of `npx envinfo --system --binaries --browsers`
+      render: Shell
+      placeholder: System, Binaries, Browsers
+    validations:
+      required: true
+  - type: dropdown
+    id: affected-package
+    attributes:
+      label: Affected package
+      options:
+        - '@vishot/core'
+        - '@vishot/source-electron'
+        - '@vishot/renderer-browser'
+        - '@vishot/mockup-desktop-vue'
+        - Unsure
+    validations:
+      required: true
+  - type: checkboxes
+    id: checkboxes
+    attributes:
+      label: Validations
+      options:
+        - label: I have read the Code of Conduct.
+          required: true
+        - label: I have checked for existing issues.
+          required: true

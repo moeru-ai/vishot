@@ -1,0 +1,8 @@
+export * from './containers/dock'
+export * from './containers/window'
+export * from './graphics'
+export * from './icons/applications'
+export * from './icons/sf-symbol-like'
+export * from './icons/system'
+export { default, default as MacosPlatformRoot, default as PlatformRoot } from './PlatformRoot.vue'
+export * from './ui'
