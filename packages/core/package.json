@@ -1,7 +1,7 @@
 {
   "name": "@vishot/core",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Shared Vishot capture contracts and artifact helpers.",
   "license": "MIT",
   "exports": {
