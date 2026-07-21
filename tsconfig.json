@@ -3,14 +3,6 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "paths": {
-      "@vishot/core": [
-        "./packages/core/src/index.ts"
-      ],
-      "@vishot/core/*": [
-        "./packages/core/src/*.ts"
-      ]
-    },
     "resolveJsonModule": true,
     "strict": true,
     "noFallthroughCasesInSwitch": true,

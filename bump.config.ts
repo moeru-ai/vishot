@@ -8,6 +8,16 @@ export default defineConfig({
   push: false,
   all: true,
   execute: async () => {
-    await x('pnpm', ['publish', '-r', '--access', 'public', '--no-git-checks', '--dry-run'])
+    await x(
+      'pnpm',
+      [
+        'publish',
+        '-r',
+        '--access',
+        'public',
+        '--no-git-checks',
+        '--dry-run',
+      ],
+    )
   },
 })
