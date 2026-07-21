@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest'
 import { createApp, h, nextTick } from 'vue'
 
-import ScenarioCanvas from '../components/scenario-canvas.vue'
+import ScenarioCanvas from '../components/canvas.vue'
 
 import { computeScenarioCanvasScale } from './scene-canvas'
 

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ScenarioCanvas } from '../../src'
-import { MacosPlatformRoot } from '../../src/platforms/macos'
-import { WindowRoot } from '../../src/platforms/macos/containers/window'
-import { WindowsPlatformRoot } from '../../src/platforms/windows'
+import { MacosPlatformRoot } from '../../src/components/platforms/macos'
+import { WindowRoot } from '../../src/components/platforms/macos/containers/window'
+import { WindowsPlatformRoot } from '../../src/components/platforms/windows'
 </script>
 
 <template>

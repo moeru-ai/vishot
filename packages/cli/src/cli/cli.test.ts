@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
+import packageJSON from '../../package.json'
+
 import { executeCli, parseCaptureBrowserCliArguments, parseCaptureElectronCliArguments } from './cli'
 
 const scenarioPath = './scenarios/settings.ts'
@@ -106,7 +108,7 @@ describe('executeCli', () => {
       stdout: { write: message => stdout.push(message) },
     })).resolves.toBe(0)
 
-    expect(stdout).toEqual(['0.0.0\n'])
+    expect(stdout).toEqual([`${packageJSON.version}\n`])
     expect(stderr).toEqual([])
   })
 

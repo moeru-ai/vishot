@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { createApp, h, inject, nextTick, onMounted, ref } from 'vue'
 import { createMemoryHistory, createRouter } from 'vue-router'
 
-import ScreenRouterProvider from './screen-router-provider.vue'
+import ScreenRouterProvider from './provider.vue'
 
 import { injectSceneRouterStore } from './context'
 
