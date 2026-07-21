@@ -4,6 +4,11 @@
   "version": "0.0.2",
   "description": "Shared Vishot capture contracts and artifact helpers.",
   "license": "MIT",
+  "homepage": "https://github.com/moeru-ai/vishot",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moeru-ai/vishot.git"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",

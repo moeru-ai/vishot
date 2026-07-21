@@ -10,6 +10,11 @@
     "url": "https://github.com/moeru-ai"
   },
   "license": "MIT",
+  "homepage": "https://github.com/moeru-ai/vishot",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moeru-ai/vishot.git"
+  },
   "scripts": {
     "alint": "alint",
     "build": "pnpm -r build",

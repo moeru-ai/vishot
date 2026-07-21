@@ -4,6 +4,11 @@
   "version": "0.0.2",
   "description": "Playwright Electron source capture adapter for Vishot.",
   "license": "MIT",
+  "homepage": "https://github.com/moeru-ai/vishot",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moeru-ai/vishot.git"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
