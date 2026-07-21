@@ -6,6 +6,8 @@ packages:
   - packages/*
 
 catalog:
+  '@alint-js/cli': ^0.0.38
+  '@alint-js/plugin-js': ^0.0.38
   '@antfu/eslint-config': ^8.2.0
   '@histoire/plugin-vue': 1.0.0-beta.1
   '@moeru/std': ^0.1.0-beta.17

@@ -1,6 +1,4 @@
-import { defineConfig } from '@alint-js/cli'
-
-import { ignorePatternsAIAgents, ignorePatternsCommon } from '@alint-js/config'
+import { defineConfig, ignorePatternsAIAgents, ignorePatternsCommon } from '@alint-js/cli'
 import jsPlugin from '@alint-js/plugin-js'
 
 export default defineConfig([

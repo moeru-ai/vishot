@@ -21,11 +21,8 @@
     "typecheck": "pnpm -r --parallel typecheck"
   },
   "devDependencies": {
-    "@alint-js/cli": "link:../alint/packages/cli",
-    "@alint-js/config": "link:../alint/packages/config",
-    "@alint-js/core": "link:../alint/packages/core",
-    "@alint-js/plugin-js": "link:../alint/packages/plugin-js",
-    "@alint-js/tools-fs": "link:../alint/packages/tools-fs",
+    "@alint-js/cli": "catalog:",
+    "@alint-js/plugin-js": "catalog:",
     "@antfu/eslint-config": "catalog:",
     "@histoire/plugin-vue": "catalog:",
     "@types/node": "catalog:",
