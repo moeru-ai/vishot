@@ -1,5 +1,5 @@
 {
-  "name": "vishot-workspace",
+  "name": "@vishot/root",
   "type": "module",
   "version": "0.0.0",
   "private": true,
