@@ -45,6 +45,7 @@ bundle/
 .eslintcache
 **/.cache/
 **/*.tsbuildinfo
+.alintcache
 
 # Turborepo
 .turbo
