@@ -20,8 +20,8 @@ import {
 import { computed, inject, onBeforeUnmount, ref, unref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { useSceneNavigation } from '../../composables/screen-navigation/use-screen-navigation'
-import { injectSceneRouterStore } from '../screen-router/context'
+import { useSceneNavigation } from '../../../composables/screen-navigation/use-screen-navigation'
+import { injectSceneRouterStore } from '../../helpers/router/context'
 
 interface SceneDefinition {
   id: string

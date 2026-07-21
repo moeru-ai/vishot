@@ -11,9 +11,6 @@
     }
   },
   "types": "./dist/index.d.mts",
-  "bin": {
-    "vishot-source-electron": "./dist/cli/capture.mjs"
-  },
   "files": [
     "dist"
   ],
@@ -22,15 +19,12 @@
   },
   "scripts": {
     "build": "tsdown",
-    "capture": "tsx src/cli/capture.ts",
     "test:run": "vitest run",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@moeru/std": "catalog:",
-    "@napi-rs/image": "catalog:",
     "@vishot/core": "workspace:*",
-    "meow": "catalog:",
     "playwright": "catalog:"
   },
   "devDependencies": {

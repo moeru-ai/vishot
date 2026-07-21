@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { ScenarioCaptureRootProps } from '../../runtime/types'
+import type { ScenarioCaptureRootProps } from '../../../runtime/types'
 
 import { computed, inject, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 
-import ScenarioCaptureRoot from '../scenario-capture-root.vue'
+import ScenarioCaptureRoot from './capture-content.vue'
 
 import { injectSceneRouterStore } from './context'
 

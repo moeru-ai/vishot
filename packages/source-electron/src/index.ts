@@ -1,4 +1,3 @@
-export { parseCaptureCliArguments } from './cli/capture'
 export { capturePage } from './runtime/capture'
 export { createScenarioContext } from './runtime/context'
 export { defineScenario } from './runtime/define-scenario'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ScenarioCaptureRootProps } from '../runtime/types'
+import type { ScenarioCaptureRootProps } from '../../../runtime/types'
 
 const props = withDefaults(defineProps<ScenarioCaptureRootProps>(), {
   padding: '0px',

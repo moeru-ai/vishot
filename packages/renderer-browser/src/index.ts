@@ -1,6 +1,4 @@
-export { parseCaptureBrowserCliArguments } from './cli/capture'
 export { captureBrowserRoots } from './runtime/capture'
-export type { CaptureBrowserCliArguments } from './runtime/types'
 export type {
   BrowserCaptureRequest,
 } from './runtime/types'

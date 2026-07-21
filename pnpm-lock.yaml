@@ -36,15 +36,15 @@ catalogs:
     bumpp:
       specifier: ^10.2.3
       version: 10.4.1
+    cac:
+      specifier: ^6.7.14
+      version: 6.7.14
     eslint:
       specifier: ^9.39.2
       version: 9.39.5
     histoire:
       specifier: 1.0.0-beta.1
       version: 1.0.0-beta.1
-    meow:
-      specifier: ^13.2.0
-      version: 13.2.0
     playwright:
       specifier: ^1.57.0
       version: 1.61.1
@@ -159,6 +159,34 @@ importers:
         specifier: 'catalog:'
         version: 3.3.7(typescript@5.9.3)
 
+  packages/cli:
+    dependencies:
+      '@moeru/std':
+        specifier: 'catalog:'
+        version: 0.1.0-beta.20
+      '@napi-rs/image':
+        specifier: 'catalog:'
+        version: 1.14.0
+      '@vishot/core':
+        specifier: workspace:*
+        version: link:../core
+      '@vishot/renderer-browser':
+        specifier: workspace:*
+        version: link:../renderer-browser
+      '@vishot/source-electron':
+        specifier: workspace:*
+        version: link:../source-electron
+      cac:
+        specifier: 'catalog:'
+        version: 6.7.14
+      playwright:
+        specifier: 'catalog:'
+        version: 1.61.1
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.13.3
+
   packages/core: {}
 
   packages/mockup-desktop-vue:
@@ -206,15 +234,9 @@ importers:
 
   packages/renderer-browser:
     dependencies:
-      '@moeru/std':
-        specifier: 'catalog:'
-        version: 0.1.0-beta.20
       '@vishot/core':
         specifier: workspace:*
         version: link:../core
-      meow:
-        specifier: 'catalog:'
-        version: 13.2.0
       playwright:
         specifier: 'catalog:'
         version: 1.61.1
@@ -231,15 +253,9 @@ importers:
       '@moeru/std':
         specifier: 'catalog:'
         version: 0.1.0-beta.20
-      '@napi-rs/image':
-        specifier: 'catalog:'
-        version: 1.14.0
       '@vishot/core':
         specifier: workspace:*
         version: link:../core
-      meow:
-        specifier: 'catalog:'
-        version: 13.2.0
       playwright:
         specifier: 'catalog:'
         version: 1.61.1
@@ -2805,10 +2821,6 @@ packages:
 
   mdurl@2.0.0:
     resolution: {integrity: sha512-Lf+9+2r+Tdp5wXDXC4PcIBjTDtq4UKjCPMQhKIuzpJNW0b96kVqSwW0bT7FhRSfmAiFYgP+SCRvdrDozfh0U5w==}
-
-  meow@13.2.0:
-    resolution: {integrity: sha512-pxQJQzB6djGPXh08dacEloMFopsOqGVRKFPYvPOt9XDZ1HasbgDZA74CJGreSU4G3Ak7EFJGoiH2auq+yXISgA==}
-    engines: {node: '>=18'}
 
   merge2@1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
@@ -6448,8 +6460,6 @@ snapshots:
   mdn-data@2.27.1: {}
 
   mdurl@2.0.0: {}
-
-  meow@13.2.0: {}
 
   merge2@1.4.1: {}
 

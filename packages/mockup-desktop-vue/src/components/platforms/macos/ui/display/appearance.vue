@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import wallpaper from '../../../../assets/wallpaper-2025-08-12.jpg'
+import wallpaper from '../../../../../assets/wallpaper-2025-08-12.jpg'
 </script>
 
 <template>

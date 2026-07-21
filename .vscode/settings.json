@@ -44,10 +44,11 @@
   "js/ts.preferences.includePackageJsonAutoImports": "off",
   "js/ts.suggest.autoImports": false,
   "cSpell.words": [
-    "Histoire",
-    "Vishot",
     "bumpp",
-    "mockup"
+    "decos",
+    "Histoire",
+    "mockup",
+    "Vishot"
   ],
   "vitest.disableWorkspaceWarning": true
 }

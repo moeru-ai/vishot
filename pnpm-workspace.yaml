@@ -16,9 +16,9 @@ catalog:
   '@vitejs/plugin-vue': ^6.0.6
   '@vueuse/core': ^14.2.1
   bumpp: ^10.2.3
+  cac: ^6.7.14
   eslint: ^9.39.2
   histoire: 1.0.0-beta.1
-  meow: ^13.2.0
   playwright: ^1.57.0
   reka-ui: ^2.6.1
   tinyexec: ^1.0.2

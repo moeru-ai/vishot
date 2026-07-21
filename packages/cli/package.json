@@ -1,8 +1,8 @@
 {
-  "name": "@vishot/renderer-browser",
+  "name": "@vishot/cli",
   "type": "module",
   "version": "0.0.0",
-  "description": "Playwright browser renderer for Vishot capture roots.",
+  "description": "Unified command line interface for Vishot capture adapters.",
   "license": "MIT",
   "exports": {
     ".": {
@@ -11,6 +11,9 @@
     }
   },
   "types": "./dist/index.d.mts",
+  "bin": {
+    "vishot": "./dist/bin/index.mjs"
+  },
   "files": [
     "dist"
   ],
@@ -23,9 +26,13 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@moeru/std": "catalog:",
+    "@napi-rs/image": "catalog:",
     "@vishot/core": "workspace:*",
-    "playwright": "catalog:",
-    "vite": "catalog:"
+    "@vishot/renderer-browser": "workspace:*",
+    "@vishot/source-electron": "workspace:*",
+    "cac": "catalog:",
+    "playwright": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:"

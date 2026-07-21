@@ -1,7 +1,5 @@
 export * from './components'
 export * from './composables'
-export { MacosPlatformRoot } from './platforms/macos'
-export { WindowsPlatformRoot } from './platforms/windows'
 export type { ScenarioCaptureRootProps } from './runtime/types'
 export { useSceneReady } from './use-scene-ready'
 export { markScenarioReady, resetScenarioReady } from '@vishot/core'

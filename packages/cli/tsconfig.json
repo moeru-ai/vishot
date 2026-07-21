@@ -1,0 +1,25 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@vishot/core": [
+        "../core/src/index.ts"
+      ],
+      "@vishot/core/*": [
+        "../core/src/*.ts"
+      ],
+      "@vishot/renderer-browser": [
+        "../renderer-browser/src/index.ts"
+      ],
+      "@vishot/source-electron": [
+        "../source-electron/src/index.ts"
+      ]
+    },
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "src"
+  ]
+}
