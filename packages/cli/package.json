@@ -1,7 +1,7 @@
 {
   "name": "@vishot/cli",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Unified command line interface for Vishot capture adapters.",
   "license": "MIT",
   "exports": {

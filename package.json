@@ -1,7 +1,7 @@
 {
   "name": "@vishot/root",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "packageManager": "pnpm@10.33.0",
   "description": "Composable screenshot sources, browser renderers, and desktop mockup components.",
