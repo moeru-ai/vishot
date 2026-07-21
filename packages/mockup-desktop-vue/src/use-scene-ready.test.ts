@@ -13,20 +13,20 @@ vi.mock('@vishot/core', () => ({
 }))
 
 class MockImage {
-  private _src = ''
-
-  addEventListener(type: string, listener: () => void): void {
-    if (type === 'load') {
-      queueMicrotask(listener)
-    }
-  }
-
   set src(value: string) {
     this._src = value
   }
 
   get src(): string {
     return this._src
+  }
+
+  private _src = ''
+
+  addEventListener(type: string, listener: () => void): void {
+    if (type === 'load') {
+      queueMicrotask(listener)
+    }
   }
 }
 

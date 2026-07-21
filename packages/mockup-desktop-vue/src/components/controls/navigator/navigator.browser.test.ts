@@ -16,8 +16,8 @@ async function mountSceneNavigator(onNavigate = vi.fn()) {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [
-      { path: '/intro-chat', component: { template: '<div />' } },
-      { path: '/intro-websocket', component: { template: '<div />' } },
+      { component: { template: '<div />' }, path: '/intro-chat' },
+      { component: { template: '<div />' }, path: '/intro-websocket' },
     ],
   })
 
@@ -100,8 +100,8 @@ describe('scene-navigator', () => {
     const router = createRouter({
       history: createMemoryHistory(),
       routes: [
-        { path: '/intro-chat', component: { template: '<div />' } },
-        { path: '/intro-websocket', component: { template: '<div />' } },
+        { component: { template: '<div />' }, path: '/intro-chat' },
+        { component: { template: '<div />' }, path: '/intro-websocket' },
       ],
     })
     await router.push('/intro-chat')
@@ -140,8 +140,8 @@ describe('scene-navigator', () => {
     const router = createRouter({
       history: createMemoryHistory(),
       routes: [
-        { path: '/intro-chat', component: { template: '<div />' } },
-        { path: '/intro-websocket', component: { template: '<div />' } },
+        { component: { template: '<div />' }, path: '/intro-chat' },
+        { component: { template: '<div />' }, path: '/intro-websocket' },
       ],
     })
     await router.push('/intro-chat')

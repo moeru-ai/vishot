@@ -4,12 +4,6 @@ type ScenarioReadyWindow = Window & {
   __SCENARIO_CAPTURE_READY__?: boolean
 }
 
-export function resetScenarioReady(): void {
-  const scenarioReadyWindow = window as ScenarioReadyWindow
-
-  scenarioReadyWindow.__SCENARIO_CAPTURE_READY__ = false
-}
-
 export function markScenarioReady(): void {
   const scenarioReadyWindow = window as ScenarioReadyWindow
 
@@ -19,4 +13,10 @@ export function markScenarioReady(): void {
       ? new Event(scenarioCaptureReadyEventType)
       : ({ type: scenarioCaptureReadyEventType } as Event),
   )
+}
+
+export function resetScenarioReady(): void {
+  const scenarioReadyWindow = window as ScenarioReadyWindow
+
+  scenarioReadyWindow.__SCENARIO_CAPTURE_READY__ = false
 }

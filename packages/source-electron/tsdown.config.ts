@@ -1,15 +1,15 @@
 import { defineConfig } from 'tsdown'
 
 export default defineConfig({
-  entry: {
-    index: 'src/index.ts',
-  },
-  format: 'esm',
+  clean: true,
   deps: {
     neverBundle: [
       '@vishot/core',
     ],
   },
   dts: true,
-  clean: true,
+  entry: {
+    index: 'src/index.ts',
+  },
+  format: 'esm',
 })

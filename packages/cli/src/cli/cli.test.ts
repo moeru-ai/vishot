@@ -27,16 +27,16 @@ describe('unified vishot cli argument parsing', () => {
       '--avif-speed',
       '4',
     ])).toEqual({
-      scenarioPath,
       appEntrypoint,
-      cwd: './apps/desktop',
-      outputDir,
-      format: 'avif',
       avif: {
         maxWidth: 1200,
         quality: 35,
         speed: 4,
       },
+      cwd: './apps/desktop',
+      format: 'avif',
+      outputDir,
+      scenarioPath,
     })
   })
 
@@ -52,8 +52,8 @@ describe('unified vishot cli argument parsing', () => {
       '--root',
       'intro-settings',
     ])).toEqual({
-      renderEntry: 'src/scenes/intro.ts',
       outputDir: './artifacts/browser-run',
+      renderEntry: 'src/scenes/intro.ts',
       rootNames: ['intro-desktop', 'intro-settings'],
     })
   })
@@ -102,8 +102,8 @@ describe('executeCli', () => {
 
     await expect(executeCli(['node', 'vishot', '--version'], {
       cwd: process.cwd(),
-      stdout: { write: message => stdout.push(message) },
       stderr: { write: message => stderr.push(message) },
+      stdout: { write: message => stdout.push(message) },
     })).resolves.toBe(0)
 
     expect(stdout).toEqual(['0.0.0\n'])
@@ -116,8 +116,8 @@ describe('executeCli', () => {
 
     await expect(executeCli(['node', 'vishot', 'unknown'], {
       cwd: process.cwd(),
-      stdout: { write: message => stdout.push(message) },
       stderr: { write: message => stderr.push(message) },
+      stdout: { write: message => stdout.push(message) },
     })).resolves.toBe(2)
 
     expect(stdout).toEqual([])

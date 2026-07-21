@@ -1,25 +1,25 @@
-export type CaptureFormat = 'png' | 'avif'
-
 export interface AvifCaptureOptions {
   maxWidth: number
   quality: number
   speed: number
 }
 
-export interface CaptureElectronCliArguments {
-  scenarioPath: string
-  appEntrypoint: string
-  cwd?: string
-  outputDir: string
-  format: CaptureFormat
-  avif?: AvifCaptureOptions
-}
-
 export interface CaptureBrowserCliArguments {
-  renderEntry: string
   outputDir: string
+  renderEntry: string
   rootNames: string[]
 }
+
+export interface CaptureElectronCliArguments {
+  appEntrypoint: string
+  avif?: AvifCaptureOptions
+  cwd?: string
+  format: CaptureFormat
+  outputDir: string
+  scenarioPath: string
+}
+
+export type CaptureFormat = 'avif' | 'png'
 
 const DEFAULT_AVIF_MAX_WIDTH = 1920
 const DEFAULT_AVIF_QUALITY = 50
@@ -31,18 +31,6 @@ export function defaultAvifCaptureOptions(): AvifCaptureOptions {
     quality: DEFAULT_AVIF_QUALITY,
     speed: DEFAULT_AVIF_SPEED,
   }
-}
-
-export function parseCaptureFormat(format: string | undefined): CaptureFormat {
-  if (format === undefined || format.length === 0) {
-    return 'png'
-  }
-
-  if (format === 'png' || format === 'avif') {
-    return format
-  }
-
-  throw new Error(`Unsupported capture format "${format}". Expected "png" or "avif".`)
 }
 
 export function parseAvifCaptureOptions(flags: {
@@ -77,6 +65,18 @@ export function parseAvifCaptureOptions(flags: {
     quality,
     speed,
   }
+}
+
+export function parseCaptureFormat(format: string | undefined): CaptureFormat {
+  if (format === undefined || format.length === 0) {
+    return 'png'
+  }
+
+  if (format === 'png' || format === 'avif') {
+    return format
+  }
+
+  throw new Error(`Unsupported capture format "${format}". Expected "png" or "avif".`)
 }
 
 function parsePositiveInteger(value: string, description: string): number {

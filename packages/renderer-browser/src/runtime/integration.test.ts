@@ -1,20 +1,20 @@
-import { access, mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
-
 import path from 'node:path'
+
+import { access, mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
 
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 
 interface FakeLocator {
-  evaluateAll: <T>(callback: (elements: Array<{ getAttribute: (name: string) => string | null }>) => T) => Promise<T>
-  waitFor: (opts: { state: 'visible' }) => Promise<void>
+  evaluateAll: <T>(callback: (elements: Array<{ getAttribute: (name: string) => null | string }>) => T) => Promise<T>
   screenshot: (opts: { animations: 'disabled', path: string }) => Promise<void>
+  waitFor: (opts: { state: 'visible' }) => Promise<void>
 }
 
 interface FakePage {
   goto: (url: string) => Promise<void>
+  locator: (selector: string) => FakeLocator
   waitForFunction: (predicate: () => boolean) => Promise<void>
   waitForTimeout: (ms: number) => Promise<void>
-  locator: (selector: string) => FakeLocator
 }
 
 function createFixturePage(html: string): FakePage {
@@ -46,6 +46,27 @@ function createFixturePage(html: string): FakePage {
 
       html = await response.text()
       readyState.ready = /__SCENARIO_CAPTURE_READY__\s*=\s*true/.test(html)
+    },
+    locator(selector: string): FakeLocator {
+      return {
+        async evaluateAll<T>(callback: (elements: Array<{ getAttribute: (name: string) => null | string }>) => T) {
+          const elements = getRootNames().map(name => ({
+            getAttribute(nameToGet: string) {
+              return nameToGet === 'data-scenario-capture-root' ? name : null
+            },
+          }))
+
+          return callback(elements)
+        },
+        async screenshot(opts: { animations: 'disabled', path: string }) {
+          await writeFile(opts.path, `fake screenshot for ${selector}\n`)
+        },
+        async waitFor(opts: { state: 'visible' }) {
+          if (opts.state !== 'visible' || !hasRoot(selector)) {
+            throw new Error(`Selector not visible: ${selector}`)
+          }
+        },
+      }
     },
     async waitForFunction(predicate: () => boolean) {
       const startedAt = Date.now()
@@ -89,27 +110,6 @@ function createFixturePage(html: string): FakePage {
     async waitForTimeout(ms: number) {
       await new Promise(resolve => setTimeout(resolve, ms))
     },
-    locator(selector: string): FakeLocator {
-      return {
-        async evaluateAll<T>(callback: (elements: Array<{ getAttribute: (name: string) => string | null }>) => T) {
-          const elements = getRootNames().map(name => ({
-            getAttribute(nameToGet: string) {
-              return nameToGet === 'data-scenario-capture-root' ? name : null
-            },
-          }))
-
-          return callback(elements)
-        },
-        async waitFor(opts: { state: 'visible' }) {
-          if (opts.state !== 'visible' || !hasRoot(selector)) {
-            throw new Error(`Selector not visible: ${selector}`)
-          }
-        },
-        async screenshot(opts: { animations: 'disabled', path: string }) {
-          await writeFile(opts.path, `fake screenshot for ${selector}\n`)
-        },
-      }
-    },
   }
 }
 
@@ -121,13 +121,13 @@ vi.mock('playwright', () => {
     chromium: {
       launch: vi.fn(async () => {
         return {
+          close: async () => {},
           newContext: async () => ({
+            close: async () => {},
             newPage: async () => {
               return createFixturePage('')
             },
-            close: async () => {},
           }),
-          close: async () => {},
         }
       }),
     },
@@ -137,6 +137,15 @@ vi.mock('playwright', () => {
 beforeAll(async () => {
   ;({ captureBrowserRoots } = await import('./capture'))
 })
+
+async function cleanupFixtureRoots(): Promise<void> {
+  await Promise.allSettled(
+    Array.from(fixtureRoots, async (rootDir) => {
+      await rm(rootDir, { force: true, recursive: true })
+      fixtureRoots.delete(rootDir)
+    }),
+  )
+}
 
 async function createViteSceneFixture(): Promise<string> {
   const rootDir = await mkdtemp(path.join(process.cwd(), '.tmp-scene-'))
@@ -185,15 +194,6 @@ export default defineConfig({
   return rootDir
 }
 
-async function cleanupFixtureRoots(): Promise<void> {
-  await Promise.allSettled(
-    Array.from(fixtureRoots, async (rootDir) => {
-      await rm(rootDir, { force: true, recursive: true })
-      fixtureRoots.delete(rootDir)
-    }),
-  )
-}
-
 afterEach(async () => {
   await cleanupFixtureRoots()
 })
@@ -208,9 +208,9 @@ describe('captureBrowserRoots', () => {
     const outputDir = path.join(sceneAppRoot, 'artifacts', 'final-test')
 
     const artifacts = await captureBrowserRoots({
-      sceneAppRoot,
-      routePath: '/',
       outputDir,
+      routePath: '/',
+      sceneAppRoot,
     })
 
     expect(artifacts.map(item => item.artifactName)).toEqual([
@@ -236,9 +236,9 @@ describe('captureBrowserRoots', () => {
 
     const artifacts = await captureBrowserRoots({
       imageTransformers: [transformer],
-      sceneAppRoot,
-      routePath: '/',
       outputDir,
+      routePath: '/',
+      sceneAppRoot,
     })
 
     expect(transformer).toHaveBeenCalledTimes(2)
@@ -277,9 +277,9 @@ describe('captureBrowserRoots', () => {
         ...artifact,
         stage: 'electron-raw',
       })],
-      sceneAppRoot,
-      routePath: '/',
       outputDir,
+      routePath: '/',
+      sceneAppRoot,
     })).rejects.toThrow('must return image artifacts with stage "browser-final"')
   }, 120000)
 
@@ -293,9 +293,9 @@ describe('captureBrowserRoots', () => {
         filePath: artifact.filePath.replace(/\.png$/, '.avif'),
         format: 'avif',
       })],
-      sceneAppRoot,
-      routePath: '/',
       outputDir,
+      routePath: '/',
+      sceneAppRoot,
     })).rejects.toThrow('must point to an existing file on disk')
   }, 120000)
 
@@ -321,9 +321,9 @@ describe('captureBrowserRoots', () => {
           },
         ]
       }],
-      sceneAppRoot,
-      routePath: '/',
       outputDir,
+      routePath: '/',
+      sceneAppRoot,
     })).rejects.toThrow('Artifact outputs')
   }, 120000)
 
@@ -342,9 +342,9 @@ describe('captureBrowserRoots', () => {
           format: 'avif',
         }
       }],
-      sceneAppRoot,
-      routePath: '/',
       outputDir,
+      routePath: '/',
+      sceneAppRoot,
     })).rejects.toThrow('both resolve to')
 
     await expect(access(path.join(outputDir, 'intro-chat-window.png'))).resolves.toBeUndefined()

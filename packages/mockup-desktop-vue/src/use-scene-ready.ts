@@ -1,16 +1,5 @@
 import { markScenarioReady, resetScenarioReady } from '@vishot/core'
-
 import { onMounted } from 'vue'
-
-async function waitForImageSource(source: string): Promise<void> {
-  await new Promise<void>((resolve, reject) => {
-    const image = new Image()
-
-    image.addEventListener('load', () => resolve(), { once: true })
-    image.addEventListener('error', () => reject(new Error(`Scenario image failed to load: ${source}`)), { once: true })
-    image.src = source
-  })
-}
 
 export function useSceneReady(sources: string[]): void {
   onMounted(async () => {
@@ -25,5 +14,15 @@ export function useSceneReady(sources: string[]): void {
     catch (error) {
       console.error(error)
     }
+  })
+}
+
+async function waitForImageSource(source: string): Promise<void> {
+  await new Promise<void>((resolve, reject) => {
+    const image = new Image()
+
+    image.addEventListener('load', () => resolve(), { once: true })
+    image.addEventListener('error', () => reject(new Error(`Scenario image failed to load: ${source}`)), { once: true })
+    image.src = source
   })
 }

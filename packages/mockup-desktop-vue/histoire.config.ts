@@ -1,20 +1,16 @@
-import { HstVue } from '@histoire/plugin-vue'
-import { defineConfig } from 'histoire'
 import UnoCSS from 'unocss/vite'
 
+import { HstVue } from '@histoire/plugin-vue'
+import { defineConfig } from 'histoire'
+
 export default defineConfig({
-  routerMode: 'hash',
-  theme: {
-    title: 'Vishot Desktop Mockups',
-  },
   plugins: [
     HstVue(),
   ],
+  routerMode: 'hash',
   setupFile: 'stories/setup.ts',
-  vite: {
-    plugins: [
-      UnoCSS(),
-    ],
+  theme: {
+    title: 'Vishot Desktop Mockups',
   },
   tree: {
     groups: [
@@ -26,6 +22,11 @@ export default defineConfig({
         id: 'capture',
         title: 'Capture',
       },
+    ],
+  },
+  vite: {
+    plugins: [
+      UnoCSS(),
     ],
   },
 })

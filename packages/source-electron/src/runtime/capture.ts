@@ -1,5 +1,4 @@
 import type { VishotArtifact } from '@vishot/core'
-
 import type { Page } from 'playwright'
 
 import type { CaptureOptions } from './types'

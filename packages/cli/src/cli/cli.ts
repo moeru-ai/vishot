@@ -3,6 +3,7 @@ import type { CliIo } from './types'
 import { cac } from 'cac'
 
 import packageJson from '../../package.json'
+
 import { commandTree, registerCommandTree } from './commands'
 
 export { parseCaptureElectronCliArguments } from './commands/capture'

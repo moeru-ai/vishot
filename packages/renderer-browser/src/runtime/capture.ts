@@ -1,127 +1,22 @@
 import type { VishotArtifact } from '@vishot/core'
-
 import type { Page } from 'playwright'
 
 import type { BrowserCaptureRequest } from './types'
 
-import { mkdir, rm } from 'node:fs/promises'
-
 import path from 'node:path'
 
-import { applyArtifactTransformers, artifactFilePath, assertArtifactFilesExist, assertUniqueArtifactFilePaths, assertUniqueCaptureFilePaths, captureRootSelector, createImageArtifact } from '@vishot/core'
+import { mkdir, rm } from 'node:fs/promises'
 
+import { applyArtifactTransformers, artifactFilePath, assertArtifactFilesExist, assertUniqueArtifactFilePaths, assertUniqueCaptureFilePaths, captureRootSelector, createImageArtifact } from '@vishot/core'
 import { chromium } from 'playwright'
+
 import { startSceneViteServer } from './vite-server'
 
 const defaultViewport = {
-  width: 1600,
-  height: 1200,
   deviceScaleFactor: 2,
+  height: 1200,
+  width: 1600,
 } as const
-
-function getScenarioCaptureRoots(page: Page): Promise<string[]> {
-  return page.locator('[data-scenario-capture-root]').evaluateAll((elements) => {
-    const rootNames = elements
-      .map(element => element.getAttribute('data-scenario-capture-root') ?? '')
-      .filter((name): name is string => name.length > 0)
-
-    return [...new Set(rootNames)]
-  })
-}
-
-async function waitForScenarioReady(page: Page): Promise<void> {
-  await page.waitForFunction(() => {
-    return (window as typeof window & { __SCENARIO_CAPTURE_READY__?: boolean }).__SCENARIO_CAPTURE_READY__ === true
-  })
-}
-
-async function waitForPostReadySettle(page: Page, settleMs: number | undefined): Promise<void> {
-  if (!settleMs || settleMs <= 0) {
-    return
-  }
-
-  await page.waitForTimeout(settleMs)
-}
-
-async function captureRoot(page: Page, outputDir: string, rootName: string): Promise<VishotArtifact> {
-  const filePath = artifactFilePath(outputDir, rootName, 'png')
-  const locator = page.locator(captureRootSelector(rootName))
-
-  await locator.waitFor({ state: 'visible' })
-  await locator.screenshot({
-    animations: 'disabled',
-    path: filePath,
-  })
-
-  return createImageArtifact({
-    artifactName: rootName,
-    filePath,
-    stage: 'browser-final',
-  })
-}
-
-function assertBrowserImageArtifact(artifact: VishotArtifact): void {
-  if (artifact.kind !== 'image' || artifact.stage !== 'browser-final') {
-    throw new Error(
-      `Browser image transformers must return image artifacts with stage "browser-final". Received kind="${artifact.kind}" stage="${artifact.stage}" for artifact "${artifact.artifactName}".`,
-    )
-  }
-}
-
-async function applyBrowserImageTransformers(
-  artifact: VishotArtifact,
-  transformers: BrowserCaptureRequest['imageTransformers'],
-): Promise<{
-  artifacts: VishotArtifact[]
-  shouldRemoveSourceFile: boolean
-  sourceFilePath: string
-}> {
-  const sourceFilePath = artifact.filePath
-  let currentArtifacts: VishotArtifact[] = [artifact]
-
-  for (const transformer of transformers ?? []) {
-    const nextArtifacts: VishotArtifact[] = []
-
-    for (const currentArtifact of currentArtifacts) {
-      const transformedArtifacts = await applyArtifactTransformers(currentArtifact, [transformer])
-
-      for (const transformedArtifact of transformedArtifacts) {
-        assertBrowserImageArtifact(transformedArtifact)
-        nextArtifacts.push(transformedArtifact)
-      }
-    }
-
-    assertUniqueArtifactFilePaths(nextArtifacts)
-    await assertArtifactFilesExist(nextArtifacts)
-    currentArtifacts = nextArtifacts
-  }
-
-  assertUniqueArtifactFilePaths(currentArtifacts)
-  await assertArtifactFilesExist(currentArtifacts)
-
-  return {
-    artifacts: currentArtifacts,
-    shouldRemoveSourceFile: currentArtifacts.length > 0 && currentArtifacts.every(artifact => artifact.filePath !== sourceFilePath),
-    sourceFilePath,
-  }
-}
-
-async function resolveBaseUrl(request: BrowserCaptureRequest): Promise<{ baseUrl: string, closeServer?: () => Promise<void> }> {
-  if (request.baseUrl) {
-    return { baseUrl: request.baseUrl }
-  }
-
-  if (request.sceneAppRoot) {
-    const server = await startSceneViteServer(request.sceneAppRoot)
-
-    return {
-      baseUrl: server.baseUrl,
-      closeServer: server.close,
-    }
-  }
-
-  throw new Error('Browser capture requires either "baseUrl" or "sceneAppRoot"')
-}
 
 export async function captureBrowserRoots(request: BrowserCaptureRequest): Promise<VishotArtifact[]> {
   const { baseUrl, closeServer } = await resolveBaseUrl(request)
@@ -130,11 +25,11 @@ export async function captureBrowserRoots(request: BrowserCaptureRequest): Promi
   try {
     browser = await chromium.launch()
     const context = await browser.newContext({
-      viewport: {
-        width: request.viewport?.width ?? defaultViewport.width,
-        height: request.viewport?.height ?? defaultViewport.height,
-      },
       deviceScaleFactor: request.viewport?.deviceScaleFactor ?? defaultViewport.deviceScaleFactor,
+      viewport: {
+        height: request.viewport?.height ?? defaultViewport.height,
+        width: request.viewport?.width ?? defaultViewport.width,
+      },
     })
 
     try {
@@ -193,4 +88,108 @@ export async function captureBrowserRoots(request: BrowserCaptureRequest): Promi
       }
     }
   }
+}
+
+async function applyBrowserImageTransformers(
+  artifact: VishotArtifact,
+  transformers: BrowserCaptureRequest['imageTransformers'],
+): Promise<{
+  artifacts: VishotArtifact[]
+  shouldRemoveSourceFile: boolean
+  sourceFilePath: string
+}> {
+  const sourceFilePath = artifact.filePath
+  let currentArtifacts: VishotArtifact[] = [artifact]
+
+  for (const transformer of transformers ?? []) {
+    const nextArtifacts: VishotArtifact[] = []
+
+    for (const currentArtifact of currentArtifacts) {
+      const transformedArtifacts = await applyArtifactTransformers(currentArtifact, [transformer])
+
+      for (const transformedArtifact of transformedArtifacts) {
+        assertBrowserImageArtifact(transformedArtifact)
+        nextArtifacts.push(transformedArtifact)
+      }
+    }
+
+    assertUniqueArtifactFilePaths(nextArtifacts)
+    await assertArtifactFilesExist(nextArtifacts)
+    currentArtifacts = nextArtifacts
+  }
+
+  assertUniqueArtifactFilePaths(currentArtifacts)
+  await assertArtifactFilesExist(currentArtifacts)
+
+  return {
+    artifacts: currentArtifacts,
+    shouldRemoveSourceFile: currentArtifacts.length > 0 && currentArtifacts.every(artifact => artifact.filePath !== sourceFilePath),
+    sourceFilePath,
+  }
+}
+
+function assertBrowserImageArtifact(artifact: VishotArtifact): void {
+  if (artifact.kind !== 'image' || artifact.stage !== 'browser-final') {
+    throw new Error(
+      `Browser image transformers must return image artifacts with stage "browser-final". Received kind="${artifact.kind}" stage="${artifact.stage}" for artifact "${artifact.artifactName}".`,
+    )
+  }
+}
+
+async function captureRoot(page: Page, outputDir: string, rootName: string): Promise<VishotArtifact> {
+  const filePath = artifactFilePath(outputDir, rootName, 'png')
+  const locator = page.locator(captureRootSelector(rootName))
+
+  await locator.waitFor({ state: 'visible' })
+  await locator.screenshot({
+    animations: 'disabled',
+    path: filePath,
+  })
+
+  return createImageArtifact({
+    artifactName: rootName,
+    filePath,
+    stage: 'browser-final',
+  })
+}
+
+function getScenarioCaptureRoots(page: Page): Promise<string[]> {
+  return page.locator('[data-scenario-capture-root]').evaluateAll((elements) => {
+    const rootNames = elements
+      .map(element => element.getAttribute('data-scenario-capture-root') ?? '')
+      .filter((name): name is string => name.length > 0)
+
+    return [...new Set(rootNames)]
+  })
+}
+
+async function resolveBaseUrl(request: BrowserCaptureRequest): Promise<{ baseUrl: string, closeServer?: () => Promise<void> }> {
+  if (request.baseUrl) {
+    return { baseUrl: request.baseUrl }
+  }
+
+  if (request.sceneAppRoot) {
+    const server = await startSceneViteServer(request.sceneAppRoot)
+
+    return {
+      baseUrl: server.baseUrl,
+      closeServer: server.close,
+    }
+  }
+
+  throw new Error('Browser capture requires either "baseUrl" or "sceneAppRoot"')
+}
+
+async function waitForPostReadySettle(page: Page, settleMs: number | undefined): Promise<void> {
+  if (!settleMs || settleMs <= 0) {
+    return
+  }
+
+  await page.waitForTimeout(settleMs)
+}
+
+async function waitForScenarioReady(page: Page): Promise<void> {
+  await page.waitForFunction(() => {
+    return (window as typeof window & { __SCENARIO_CAPTURE_READY__?: boolean }).__SCENARIO_CAPTURE_READY__ === true
+  })
 }

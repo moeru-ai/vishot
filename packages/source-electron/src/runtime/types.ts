@@ -1,10 +1,14 @@
 import type { ArtifactTransformer, VishotArtifact } from '@vishot/core'
-
 import type { ElectronApplication, Page } from 'playwright'
 
 export interface CaptureOptions {
   fullPage?: boolean
   transformers?: ArtifactTransformer[]
+}
+
+export interface ElectronScenario {
+  id: string
+  run: (context: ScenarioContext) => Promise<void>
 }
 
 /**
@@ -15,12 +19,7 @@ export interface CaptureOptions {
  * classification and navigation helpers around this generic capture boundary.
  */
 export interface ScenarioContext {
+  capture: (name: string, page: Page, options?: CaptureOptions) => Promise<VishotArtifact[]>
   electronApp: ElectronApplication
   outputDir: string
-  capture: (name: string, page: Page, options?: CaptureOptions) => Promise<VishotArtifact[]>
-}
-
-export interface ElectronScenario {
-  id: string
-  run: (context: ScenarioContext) => Promise<void>
 }

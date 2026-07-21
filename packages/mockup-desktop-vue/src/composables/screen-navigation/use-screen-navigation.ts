@@ -9,8 +9,8 @@ export interface SceneNavigationScene {
 
 export interface UseSceneNavigationOptions<TScene extends SceneNavigationScene> {
   currentSceneId: Ref<string>
-  onNavigate: Ref<(sceneId: string) => void> | ((sceneId: string) => void)
-  scenes: Ref<readonly TScene[]> | readonly TScene[]
+  onNavigate: ((sceneId: string) => void) | Ref<(sceneId: string) => void>
+  scenes: readonly TScene[] | Ref<readonly TScene[]>
 }
 
 export function useSceneNavigation<TScene extends SceneNavigationScene>(

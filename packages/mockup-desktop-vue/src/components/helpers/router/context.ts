@@ -7,7 +7,7 @@ export interface SceneRouterCaptureRoot {
 }
 
 export interface SceneRouterStore {
-  activeCaptureRootId: ComputedRef<string | null>
+  activeCaptureRootId: ComputedRef<null | string>
   currentRouteCaptureRoots: ComputedRef<SceneRouterCaptureRoot[]>
   navigateToCaptureRoot: (id: string) => Promise<void>
   registerCaptureRoot: (root: SceneRouterCaptureRoot) => void

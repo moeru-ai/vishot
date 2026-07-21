@@ -10,69 +10,32 @@ import { defineCommand } from './command'
 export const browserCaptureUsageMessage = 'Usage: vishot render --target browser <render-entry> --output-dir <dir>'
 
 export const render = defineCommand({
-  name: 'render',
-  description: 'Render capture roots with a renderer target.',
-  arguments: '<render-entry>',
-  options: [
-    {
-      flags: '--target <target>',
-      description: 'Render target: browser',
-    },
-    {
-      flags: '-o, --output-dir <dir>',
-      description: 'Directory to write browser capture output into',
-    },
-    {
-      flags: '--root <name>',
-      description: 'Named capture root to export; may be repeated',
-    },
-  ],
   action: async (context, renderEntry, options) => {
     await runCaptureBrowser(parseCaptureBrowserCliArgumentsFromOptions(renderEntry, options), context.io.cwd)
     return 0
   },
+  arguments: '<render-entry>',
+  description: 'Render capture roots with a renderer target.',
+  name: 'render',
+  options: [
+    {
+      description: 'Render target: browser',
+      flags: '--target <target>',
+    },
+    {
+      description: 'Directory to write browser capture output into',
+      flags: '-o, --output-dir <dir>',
+    },
+    {
+      description: 'Named capture root to export; may be repeated',
+      flags: '--root <name>',
+    },
+  ],
 })
 
 export function parseCaptureBrowserCliArguments(argv: string[]): CaptureBrowserCliArguments {
-  const { input, flags } = parseArgv(argv)
+  const { flags, input } = parseArgv(argv)
   return parseCaptureBrowserCliArgumentsFromOptions(input[0], flags, input.length)
-}
-
-async function runCaptureBrowser(options: CaptureBrowserCliArguments, commandCwd: string): Promise<void> {
-  await captureBrowserRoots({
-    sceneAppRoot: path.resolve(commandCwd, options.renderEntry),
-    routePath: '/',
-    outputDir: path.resolve(commandCwd, options.outputDir),
-    rootNames: options.rootNames,
-  })
-}
-
-function parseCaptureBrowserCliArgumentsFromOptions(
-  renderEntry: unknown,
-  options: unknown,
-  inputLength = 1,
-): CaptureBrowserCliArguments {
-  const flags = options as Record<string, unknown>
-  const outputDir = parseStringOption(flags.outputDir)
-  const target = parseStringOption(flags.target)
-
-  if (target !== undefined && target !== 'browser') {
-    throw new Error(`Unsupported render target "${target}". Expected "browser".`)
-  }
-
-  if (inputLength !== 1
-    || typeof renderEntry !== 'string'
-    || renderEntry.length === 0
-    || target === undefined
-    || outputDir === undefined) {
-    throw new Error(browserCaptureUsageMessage)
-  }
-
-  return {
-    renderEntry,
-    outputDir,
-    rootNames: parseRepeatedStringOption(flags.root),
-  }
 }
 
 function parseArgv(argv: readonly string[]): { flags: Record<string, unknown>, input: string[] } {
@@ -113,4 +76,41 @@ function parseArgv(argv: readonly string[]): { flags: Record<string, unknown>, i
   }
 
   return { flags, input }
+}
+
+function parseCaptureBrowserCliArgumentsFromOptions(
+  renderEntry: unknown,
+  options: unknown,
+  inputLength = 1,
+): CaptureBrowserCliArguments {
+  const flags = options as Record<string, unknown>
+  const outputDir = parseStringOption(flags.outputDir)
+  const target = parseStringOption(flags.target)
+
+  if (target !== undefined && target !== 'browser') {
+    throw new Error(`Unsupported render target "${target}". Expected "browser".`)
+  }
+
+  if (inputLength !== 1
+    || typeof renderEntry !== 'string'
+    || renderEntry.length === 0
+    || target === undefined
+    || outputDir === undefined) {
+    throw new Error(browserCaptureUsageMessage)
+  }
+
+  return {
+    outputDir,
+    renderEntry,
+    rootNames: parseRepeatedStringOption(flags.root),
+  }
+}
+
+async function runCaptureBrowser(options: CaptureBrowserCliArguments, commandCwd: string): Promise<void> {
+  await captureBrowserRoots({
+    outputDir: path.resolve(commandCwd, options.outputDir),
+    rootNames: options.rootNames,
+    routePath: '/',
+    sceneAppRoot: path.resolve(commandCwd, options.renderEntry),
+  })
 }

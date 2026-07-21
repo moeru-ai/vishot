@@ -2,11 +2,8 @@ import { defineConfig } from 'bumpp'
 import { x } from 'tinyexec'
 
 export default defineConfig({
-  recursive: true,
-  commit: 'release: v%s',
-  sign: false,
-  push: false,
   all: true,
+  commit: 'release: v%s',
   execute: async () => {
     await x(
       'pnpm',
@@ -20,4 +17,7 @@ export default defineConfig({
       ],
     )
   },
+  push: false,
+  recursive: true,
+  sign: false,
 })

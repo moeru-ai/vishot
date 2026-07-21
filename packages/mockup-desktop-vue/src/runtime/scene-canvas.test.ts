@@ -9,29 +9,29 @@ import { computeScenarioCanvasScale } from './scene-canvas'
 describe('computeScenarioCanvasScale', () => {
   it('fits the canvas to the smallest viewport ratio', () => {
     expect(computeScenarioCanvasScale({
-      viewportWidth: 1440,
-      viewportHeight: 900,
-      canvasWidth: 1920,
       canvasHeight: 1080,
+      canvasWidth: 1920,
+      viewportHeight: 900,
+      viewportWidth: 1440,
     })).toBe(0.75)
   })
 
   it('falls back to 1 when dimensions are missing', () => {
     expect(computeScenarioCanvasScale({
-      viewportWidth: 0,
-      viewportHeight: 900,
-      canvasWidth: 1920,
       canvasHeight: 1080,
+      canvasWidth: 1920,
+      viewportHeight: 900,
+      viewportWidth: 0,
     })).toBe(1)
   })
 
   it('applies an additional multiplier to the fitted scale', () => {
     expect(computeScenarioCanvasScale({
-      viewportWidth: 1440,
-      viewportHeight: 900,
-      canvasWidth: 1920,
       canvasHeight: 1080,
+      canvasWidth: 1920,
       scaleMultiplier: 0.75,
+      viewportHeight: 900,
+      viewportWidth: 1440,
     })).toBe(0.5625)
   })
 
@@ -43,8 +43,8 @@ describe('computeScenarioCanvasScale', () => {
       render: () => h(
         ScenarioCanvas,
         {
-          width: 1920,
           height: 1080,
+          width: 1920,
         },
         {
           default: () => h('div', { id: 'scene-content' }),
@@ -74,9 +74,9 @@ describe('computeScenarioCanvasScale', () => {
       render: () => h(
         ScenarioCanvas,
         {
-          width: 1920,
           height: 1080,
           scaleMultiplier: 0.75,
+          width: 1920,
         },
         {
           default: () => h('div', { id: 'scene-content' }),

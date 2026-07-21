@@ -1,21 +1,5 @@
 import type { ArtifactTransformer, VishotArtifact, VishotArtifactStage } from './types'
 
-export function createImageArtifact(options: {
-  artifactName: string
-  filePath: string
-  stage: VishotArtifactStage
-  metadata?: Record<string, unknown>
-}): VishotArtifact {
-  return {
-    artifactName: options.artifactName,
-    filePath: options.filePath,
-    format: 'png',
-    kind: 'image',
-    metadata: options.metadata,
-    stage: options.stage,
-  }
-}
-
 export async function applyArtifactTransformers(
   artifact: VishotArtifact,
   transformers: ArtifactTransformer[] | undefined,
@@ -34,4 +18,20 @@ export async function applyArtifactTransformers(
   }
 
   return currentArtifacts
+}
+
+export function createImageArtifact(options: {
+  artifactName: string
+  filePath: string
+  metadata?: Record<string, unknown>
+  stage: VishotArtifactStage
+}): VishotArtifact {
+  return {
+    artifactName: options.artifactName,
+    filePath: options.filePath,
+    format: 'png',
+    kind: 'image',
+    metadata: options.metadata,
+    stage: options.stage,
+  }
 }

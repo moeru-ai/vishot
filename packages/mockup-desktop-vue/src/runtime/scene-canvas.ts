@@ -1,9 +1,9 @@
 export interface ScenarioCanvasScaleOptions {
-  viewportWidth: number
-  viewportHeight: number
-  canvasWidth: number
   canvasHeight: number
+  canvasWidth: number
   scaleMultiplier?: number
+  viewportHeight: number
+  viewportWidth: number
 }
 
 /**
@@ -20,7 +20,7 @@ export interface ScenarioCanvasScaleOptions {
  * - `slidev/packages/client/env.ts`
  */
 export function computeScenarioCanvasScale(options: ScenarioCanvasScaleOptions): number {
-  const { viewportWidth, viewportHeight, canvasWidth, canvasHeight } = options
+  const { canvasHeight, canvasWidth, viewportHeight, viewportWidth } = options
   const scaleMultiplier = options.scaleMultiplier && options.scaleMultiplier > 0
     ? options.scaleMultiplier
     : 1

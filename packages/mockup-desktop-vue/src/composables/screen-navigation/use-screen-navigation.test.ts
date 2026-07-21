@@ -13,9 +13,9 @@ describe('useSceneNavigation', () => {
   it('derives active, prev, and next scenes from current id', () => {
     const currentSceneId = ref('intro-websocket')
     const nav = useSceneNavigation({
-      scenes,
       currentSceneId,
       onNavigate: () => {},
+      scenes,
     })
 
     expect(nav.activeScene.value?.id).toBe('intro-websocket')
@@ -28,9 +28,9 @@ describe('useSceneNavigation', () => {
   it('returns unknown active scene fallback when current id is not in registry', () => {
     const currentSceneId = ref('missing')
     const nav = useSceneNavigation({
-      scenes,
       currentSceneId,
       onNavigate: () => {},
+      scenes,
     })
 
     expect(nav.activeScene.value).toBeUndefined()
@@ -42,9 +42,9 @@ describe('useSceneNavigation', () => {
   it('filters by query and keeps active scene first in palette items', () => {
     const currentSceneId = ref('intro-websocket')
     const nav = useSceneNavigation({
-      scenes,
       currentSceneId,
       onNavigate: () => {},
+      scenes,
     })
 
     nav.searchQuery.value = 'intro'
@@ -56,9 +56,9 @@ describe('useSceneNavigation', () => {
     const currentSceneId = ref('intro-chat')
     const calls: string[] = []
     const nav = useSceneNavigation({
-      scenes,
       currentSceneId,
       onNavigate: id => calls.push(id),
+      scenes,
     })
 
     nav.goToScene('settings-only')
@@ -69,9 +69,9 @@ describe('useSceneNavigation', () => {
     const currentSceneId = ref('intro-websocket')
     const calls: string[] = []
     const nav = useSceneNavigation({
-      scenes,
       currentSceneId,
       onNavigate: id => calls.push(id),
+      scenes,
     })
 
     nav.goPrev()
@@ -82,9 +82,9 @@ describe('useSceneNavigation', () => {
     const currentSceneId = ref('intro-websocket')
     const calls: string[] = []
     const nav = useSceneNavigation({
-      scenes,
       currentSceneId,
       onNavigate: id => calls.push(id),
+      scenes,
     })
 
     nav.goNext()
@@ -94,9 +94,9 @@ describe('useSceneNavigation', () => {
   it('does not navigate backward at the first scene or forward at the last scene', () => {
     const firstSceneCalls: string[] = []
     const firstSceneNav = useSceneNavigation({
-      scenes,
       currentSceneId: ref('intro-chat'),
       onNavigate: id => firstSceneCalls.push(id),
+      scenes,
     })
 
     firstSceneNav.goPrev()
@@ -104,9 +104,9 @@ describe('useSceneNavigation', () => {
 
     const lastSceneCalls: string[] = []
     const lastSceneNav = useSceneNavigation({
-      scenes,
       currentSceneId: ref('settings-only'),
       onNavigate: id => lastSceneCalls.push(id),
+      scenes,
     })
 
     lastSceneNav.goNext()

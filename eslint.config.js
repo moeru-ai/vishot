@@ -2,8 +2,8 @@ import { defineConfig } from '@moeru/eslint-config'
 
 export default defineConfig({
   masknet: false,
+  perfectionist: true,
   preferArrow: false,
-  perfectionist: false,
   sonarjs: false,
   sortPackageJsonScripts: false,
   typescript: true,
@@ -20,15 +20,12 @@ export default defineConfig({
   ],
 }, {
   rules: {
-    'pnpm/json-valid-catalog': 'off',
-    'pnpm/json-enforce-catalog': 'off',
-    'pnpm/yaml-enforce-settings': 'off',
     'antfu/import-dedupe': 'error',
     // TODO: remove this
     'depend/ban-dependencies': 'warn',
     'import/order': 'off',
+    'markdown/require-alt-text': 'off',
     'no-console': ['error', { allow: ['warn', 'error', 'info'] }],
-
     // Catches the manual `error instanceof Error ? error.message : ...`
     // pattern AGENTS.md forbids. The selector matches a ConditionalExpression
     // whose test is `<x> instanceof Error` and whose consequent is `<x>.message`,
@@ -38,20 +35,23 @@ export default defineConfig({
     'no-restricted-syntax': [
       'warn',
       {
-        selector: 'ConditionalExpression[test.type=\'BinaryExpression\'][test.operator=\'instanceof\'][test.right.name=\'Error\'][consequent.type=\'MemberExpression\'][consequent.property.name=\'message\']',
         message: 'Avoid `error instanceof Error ? error.message : ...`. Use `errorMessageFrom(error)` from \'@moeru/std\' (or `errorMessageFromUnknown(error, fallback)` from \'@proj-airi/stage-shared\'). Pair with `?? \'fallback\'` when a default is needed.',
+        selector: 'ConditionalExpression[test.type=\'BinaryExpression\'][test.operator=\'instanceof\'][test.right.name=\'Error\'][consequent.type=\'MemberExpression\'][consequent.property.name=\'message\']',
       },
       'TSEnumDeclaration[const=true]',
       'TSExportAssignment',
     ],
+    'pnpm/json-enforce-catalog': 'off',
 
+    'pnpm/json-valid-catalog': 'off',
+
+    'pnpm/yaml-enforce-settings': 'off',
     // 'sonarjs/cognitive-complexity': 'off',
     // 'sonarjs/no-commented-code': 'off',
     // 'sonarjs/pseudo-random': 'off',
     'style/padding-line-between-statements': 'error',
     'vue/prefer-separate-static-class': 'off',
     'yaml/plain-scalar': 'off',
-    'markdown/require-alt-text': 'off',
   },
 }, {
   files: ['apps/server/**/*.ts'],
@@ -59,12 +59,12 @@ export default defineConfig({
     'no-restricted-syntax': [
       'error',
       {
-        selector: 'CallExpression[callee.type=\'MemberExpression\'][callee.object.name=\'vi\'][callee.property.name=/^(mock|doMock)$/][arguments.0.type=\'Literal\'][arguments.0.value=/^(\\.|@proj-airi\\/|~)/]',
         message: 'Do not mock internal project modules with vi.mock or vi.doMock. Inject the collaborator through the route, service, or factory boundary and pass a fake or spy in tests.',
+        selector: 'CallExpression[callee.type=\'MemberExpression\'][callee.object.name=\'vi\'][callee.property.name=/^(mock|doMock)$/][arguments.0.type=\'Literal\'][arguments.0.value=/^(\\.|@proj-airi\\/|~)/]',
       },
       {
-        selector: 'CallExpression[callee.type=\'MemberExpression\'][callee.object.name=\'vi\'][callee.property.name=\'hoisted\']',
         message: 'Do not use vi.hoisted. If a test needs a collaborator spy, expose an explicit dependency injection point instead of hoisting module mocks.',
+        selector: 'CallExpression[callee.type=\'MemberExpression\'][callee.object.name=\'vi\'][callee.property.name=\'hoisted\']',
       },
     ],
   },

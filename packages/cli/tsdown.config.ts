@@ -2,10 +2,7 @@ import { defineConfig } from 'tsdown'
 
 export default defineConfig([
   {
-    entry: {
-      index: 'src/index.ts',
-    },
-    format: 'esm',
+    clean: true,
     deps: {
       neverBundle: [
         '@vishot/core',
@@ -14,13 +11,13 @@ export default defineConfig([
       ],
     },
     dts: true,
-    clean: true,
-  },
-  {
     entry: {
-      'bin/index': 'src/bin/index.ts',
+      index: 'src/index.ts',
     },
     format: 'esm',
+  },
+  {
+    clean: false,
     deps: {
       neverBundle: [
         '@vishot/core',
@@ -29,7 +26,10 @@ export default defineConfig([
       ],
     },
     dts: false,
-    clean: false,
+    entry: {
+      'bin/index': 'src/bin/index.ts',
+    },
+    format: 'esm',
     outputOptions: {
       banner: '#!/usr/bin/env node',
     },

@@ -1,16 +1,16 @@
 import type { ArtifactTransformer } from '@vishot/core'
 
 export interface BrowserCaptureRequest {
-  sceneAppRoot?: string
   baseUrl?: string
-  routePath: string
-  outputDir: string
-  settleMs?: number
-  rootNames?: string[]
   imageTransformers?: ArtifactTransformer[]
+  outputDir: string
+  rootNames?: string[]
+  routePath: string
+  sceneAppRoot?: string
+  settleMs?: number
   viewport?: {
-    width: number
-    height: number
     deviceScaleFactor?: number
+    height: number
+    width: number
   }
 }

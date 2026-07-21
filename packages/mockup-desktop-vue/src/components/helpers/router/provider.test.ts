@@ -3,15 +3,15 @@ import { describe, expect, it } from 'vitest'
 import { createApp, h, inject, nextTick, onMounted, ref } from 'vue'
 import { createMemoryHistory, createRouter } from 'vue-router'
 
-import { injectSceneRouterStore } from './context'
-
 import ScreenRouterProvider from './screen-router-provider.vue'
+
+import { injectSceneRouterStore } from './context'
 
 function mountProviderWithQuery() {
   const host = document.createElement('div')
   document.body.appendChild(host)
 
-  const activeCaptureRootId = ref<string | null>(null)
+  const activeCaptureRootId = ref<null | string>(null)
 
   const Probe = {
     setup() {
@@ -43,7 +43,7 @@ function mountProviderWithQuery() {
 
   const router = createRouter({
     history: createMemoryHistory(),
-    routes: [{ path: '/docs/setup-and-use', component: Probe }],
+    routes: [{ component: Probe, path: '/docs/setup-and-use' }],
   })
 
   const app = createApp({
@@ -51,12 +51,12 @@ function mountProviderWithQuery() {
   })
   app.use(router)
 
-  return { app, host, router, activeCaptureRootId }
+  return { activeCaptureRootId, app, host, router }
 }
 
 describe('scene-router-provider', () => {
   it('ignores stale capture query ids that are not registered on the current route', async () => {
-    const { app, host, router, activeCaptureRootId } = mountProviderWithQuery()
+    const { activeCaptureRootId, app, host, router } = mountProviderWithQuery()
 
     await router.push({ path: '/docs/setup-and-use', query: { capture: 'manual-settings-window' } })
     await router.isReady()
@@ -71,7 +71,7 @@ describe('scene-router-provider', () => {
   })
 
   it('keeps capture query ids that are registered on the current route', async () => {
-    const { app, host, router, activeCaptureRootId } = mountProviderWithQuery()
+    const { activeCaptureRootId, app, host, router } = mountProviderWithQuery()
 
     await router.push({ path: '/docs/setup-and-use', query: { capture: 'manual-chat-window' } })
     await router.isReady()
