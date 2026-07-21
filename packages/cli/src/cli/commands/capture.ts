@@ -1,6 +1,6 @@
 import type { ArtifactTransformer } from '@vishot/core'
 
-import type { CaptureElectronCliArguments } from '../../../capture-options'
+import type { CaptureElectronCliArguments } from '../capture-options'
 
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import path from 'node:path'
@@ -9,15 +9,15 @@ import { Transformer } from '@napi-rs/image'
 import { createScenarioContext, loadScenarioModule } from '@vishot/source-electron'
 import { _electron as electron } from 'playwright'
 
-import { defaultAvifCaptureOptions, parseAvifCaptureOptions, parseCaptureFormat } from '../../../capture-options'
-import { parseStringOption } from '../../../options'
-import { defineCommand } from '../../command'
+import { defaultAvifCaptureOptions, parseAvifCaptureOptions, parseCaptureFormat } from '../capture-options'
+import { parseStringOption } from '../options'
+import { defineCommand } from './command'
 
 export const electronCaptureUsageMessage = 'Usage: vishot capture --target electron <scenario.ts> --app-entrypoint <electron-main> --output-dir <dir>'
 
 export const capture = defineCommand({
   name: 'capture',
-  description: 'Capture screenshots from a Playwright Electron source scenario.',
+  description: 'Capture screenshots from an application source target.',
   arguments: '<scenario.ts>',
   options: [
     {

@@ -1,5 +1,5 @@
-import { capture as render } from './renderer/browser/capture'
-import { capture } from './source/electron/capture'
+import { capture } from './capture'
+import { render } from './render'
 
 export const commandTree = [
   capture,

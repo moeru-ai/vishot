@@ -1,17 +1,17 @@
-import type { CaptureBrowserCliArguments } from '../../../capture-options'
+import type { CaptureBrowserCliArguments } from '../capture-options'
 
 import path from 'node:path'
 
 import { captureBrowserRoots } from '@vishot/renderer-browser'
 
-import { parseRepeatedStringOption, parseStringOption } from '../../../options'
-import { defineCommand } from '../../command'
+import { parseRepeatedStringOption, parseStringOption } from '../options'
+import { defineCommand } from './command'
 
 export const browserCaptureUsageMessage = 'Usage: vishot render --target browser <render-entry> --output-dir <dir>'
 
-export const capture = defineCommand({
+export const render = defineCommand({
   name: 'render',
-  description: 'Capture browser-rendered scenes and export named roots.',
+  description: 'Render capture roots with a renderer target.',
   arguments: '<render-entry>',
   options: [
     {
