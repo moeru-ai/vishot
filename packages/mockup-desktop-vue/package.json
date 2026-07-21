@@ -1,7 +1,7 @@
 {
   "name": "@vishot/mockup-desktop-vue",
   "type": "module",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Vue capture canvas and desktop mockup components for Vishot.",
   "license": "MIT",
   "homepage": "https://github.com/moeru-ai/vishot",
