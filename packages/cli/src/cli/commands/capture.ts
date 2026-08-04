@@ -7,21 +7,22 @@ import path from 'node:path'
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 
 import { Transformer } from '@napi-rs/image'
-import { createScenarioContext, loadScenarioModule } from '@vishot/source-electron'
+import { captureNameFromUrl } from '@vishot/core'
+import { createScenarioContext, findWindow, loadScenarioModule } from '@vishot/source-electron'
 import { _electron as electron } from 'playwright'
 
-import { defaultAvifCaptureOptions, parseAvifCaptureOptions, parseCaptureFormat } from '../capture-options'
+import { defaultAvifCaptureOptions, parseAvifCaptureOptions, parseCaptureFormat, parseNonNegativeIntegerOption } from '../capture-options'
 import { parseStringOption } from '../options'
 import { defineCommand } from './command'
 
-export const electronCaptureUsageMessage = 'Usage: vishot capture --target electron <scenario.ts> --app-entrypoint <electron-main> --output-dir <dir>'
+export const electronCaptureUsageMessage = 'Usage: vishot capture --target electron [scenario.ts] --app-entrypoint <electron-main> --output-dir <dir>'
 
 export const capture = defineCommand({
   action: async (context, scenarioPath, options) => {
     await runCaptureElectron(parseCaptureElectronCliArgumentsFromOptions(scenarioPath, options), context.io.cwd)
     return 0
   },
-  arguments: '<scenario.ts>',
+  arguments: '[scenario.ts]',
   description: 'Capture screenshots from an application source target.',
   name: 'capture',
   options: [
@@ -38,8 +39,28 @@ export const capture = defineCommand({
       flags: '--cwd <path>',
     },
     {
+      description: 'Electron executable path when Playwright cannot discover the project binary',
+      flags: '--electron-executable <path>',
+    },
+    {
       description: 'Directory to write capture output into',
       flags: '-o, --output-dir <dir>',
+    },
+    {
+      description: 'Artifact name override for built-in window capture',
+      flags: '--name <name>',
+    },
+    {
+      description: 'Required renderer URL substring for built-in window capture',
+      flags: '--window-url <substring>',
+    },
+    {
+      description: 'Required document title substring for built-in window capture',
+      flags: '--window-title <substring>',
+    },
+    {
+      description: 'Delay before built-in window capture in milliseconds',
+      flags: '--settle-ms <ms>',
     },
     {
       description: 'Output format: png or avif',
@@ -134,12 +155,11 @@ function parseCaptureElectronCliArgumentsFromOptions(
     throw new Error(`Unsupported capture target "${target}". Expected "electron".`)
   }
 
-  if (inputLength !== 1
-    || typeof scenarioPath !== 'string'
-    || scenarioPath.length === 0
+  if (inputLength > 1
     || target === undefined
     || appEntrypoint === undefined
-    || outputDir === undefined) {
+    || outputDir === undefined
+    || (scenarioPath !== undefined && (typeof scenarioPath !== 'string' || scenarioPath.length === 0))) {
     throw new Error(electronCaptureUsageMessage)
   }
 
@@ -154,10 +174,15 @@ function parseCaptureElectronCliArgumentsFromOptions(
           avifSpeed: parseStringOption(flags.avifSpeed),
         })
       : undefined,
+    captureName: parseStringOption(flags.name),
     cwd: parseStringOption(flags.cwd),
+    electronExecutable: parseStringOption(flags.electronExecutable),
     format,
     outputDir,
-    scenarioPath,
+    scenarioPath: typeof scenarioPath === 'string' ? scenarioPath : undefined,
+    settleMs: parseNonNegativeIntegerOption(flags.settleMs, 'settle duration', 0),
+    windowTitle: parseStringOption(flags.windowTitle),
+    windowUrl: parseStringOption(flags.windowUrl),
   }
 }
 
@@ -168,11 +193,16 @@ async function runCaptureElectron(options: CaptureElectronCliArguments, commandC
 
   await mkdir(resolvedOutputDir, { recursive: true })
 
-  const loadedScenario = await loadScenarioModule(options.scenarioPath)
+  const loadedScenario = options.scenarioPath
+    ? await loadScenarioModule(options.scenarioPath)
+    : undefined
 
   const electronApp = await electron.launch({
     args: [resolvedAppEntrypoint],
     cwd: resolvedCwd,
+    executablePath: options.electronExecutable
+      ? path.resolve(commandCwd, options.electronExecutable)
+      : undefined,
   })
 
   try {
@@ -185,7 +215,26 @@ async function runCaptureElectron(options: CaptureElectronCliArguments, commandC
           }
         : undefined,
     )
-    await loadedScenario.scenario.run(context)
+    if (loadedScenario) {
+      await loadedScenario.scenario.run(context)
+      return
+    }
+
+    const page = await findWindow(electronApp, {
+      title: options.windowTitle,
+      url: options.windowUrl,
+    })
+    await page.waitForLoadState('domcontentloaded')
+
+    if (options.settleMs > 0) {
+      await page.waitForTimeout(options.settleMs)
+    }
+
+    const title = (await page.title()).trim()
+    const captureName = options.captureName
+      ?? (title.length > 0 ? title : captureNameFromUrl(page.url()))
+
+    await context.capture(captureName, page)
   }
   finally {
     await electronApp.close()

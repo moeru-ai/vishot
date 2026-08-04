@@ -5,18 +5,28 @@ export interface AvifCaptureOptions {
 }
 
 export interface CaptureBrowserCliArguments {
+  captureName?: string
+  fullPage: boolean
+  height: number
   outputDir: string
   renderEntry: string
   rootNames: string[]
+  settleMs: number
+  width: number
 }
 
 export interface CaptureElectronCliArguments {
   appEntrypoint: string
   avif?: AvifCaptureOptions
+  captureName?: string
   cwd?: string
+  electronExecutable?: string
   format: CaptureFormat
   outputDir: string
-  scenarioPath: string
+  scenarioPath?: string
+  settleMs: number
+  windowTitle?: string
+  windowUrl?: string
 }
 
 export type CaptureFormat = 'avif' | 'png'
@@ -24,6 +34,8 @@ export type CaptureFormat = 'avif' | 'png'
 const DEFAULT_AVIF_MAX_WIDTH = 1920
 const DEFAULT_AVIF_QUALITY = 50
 const DEFAULT_AVIF_SPEED = 6
+export const DEFAULT_BROWSER_HEIGHT = 1200
+export const DEFAULT_BROWSER_WIDTH = 1600
 
 export function defaultAvifCaptureOptions(): AvifCaptureOptions {
   return {
@@ -79,8 +91,48 @@ export function parseCaptureFormat(format: string | undefined): CaptureFormat {
   throw new Error(`Unsupported capture format "${format}". Expected "png" or "avif".`)
 }
 
+export function parseNonNegativeIntegerOption(
+  value: unknown,
+  description: string,
+  defaultValue: number,
+): number {
+  const parsed = value === undefined
+    ? defaultValue
+    : parseWholeNumber(value, description)
+
+  if (parsed < 0) {
+    throw new Error(`Unsupported ${description} "${parsed}". Expected an integer >= 0.`)
+  }
+
+  return parsed
+}
+
+export function parsePositiveIntegerOption(
+  value: unknown,
+  description: string,
+  defaultValue: number,
+): number {
+  const parsed = value === undefined
+    ? defaultValue
+    : parseWholeNumber(value, description)
+
+  if (parsed < 1) {
+    throw new Error(`Unsupported ${description} "${parsed}". Expected an integer >= 1.`)
+  }
+
+  return parsed
+}
+
 function parsePositiveInteger(value: string, description: string): number {
-  if (!/^\d+$/.test(value)) {
+  return parseWholeNumber(value, description)
+}
+
+function parseWholeNumber(value: unknown, description: string): number {
+  if (typeof value === 'number' && Number.isInteger(value)) {
+    return value
+  }
+
+  if (typeof value !== 'string' || !/^\d+$/.test(value)) {
     throw new Error(`Unsupported ${description} "${value}". Expected a whole number.`)
   }
 

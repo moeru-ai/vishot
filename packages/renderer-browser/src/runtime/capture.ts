@@ -1,13 +1,13 @@
 import type { VishotArtifact } from '@vishot/core'
 import type { Page } from 'playwright'
 
-import type { BrowserCaptureRequest } from './types'
+import type { BrowserCaptureRequest, BrowserPageCaptureRequest } from './types'
 
 import path from 'node:path'
 
 import { mkdir, rm } from 'node:fs/promises'
 
-import { applyArtifactTransformers, artifactFilePath, assertArtifactFilesExist, assertUniqueArtifactFilePaths, assertUniqueCaptureFilePaths, captureRootSelector, createImageArtifact } from '@vishot/core'
+import { applyArtifactTransformers, artifactFilePath, assertArtifactFilesExist, assertUniqueArtifactFilePaths, assertUniqueCaptureFilePaths, captureNameFromUrl, captureRootSelector, createImageArtifact } from '@vishot/core'
 import { chromium } from 'playwright'
 
 import { startSceneViteServer } from './vite-server'
@@ -17,6 +17,49 @@ const defaultViewport = {
   height: 1200,
   width: 1600,
 } as const
+
+/** Captures a URL directly when the page does not expose Vishot capture roots. */
+export async function captureBrowserPage(request: BrowserPageCaptureRequest): Promise<VishotArtifact> {
+  const browser = await chromium.launch()
+
+  try {
+    const context = await browser.newContext({
+      deviceScaleFactor: request.viewport?.deviceScaleFactor ?? defaultViewport.deviceScaleFactor,
+      viewport: {
+        height: request.viewport?.height ?? defaultViewport.height,
+        width: request.viewport?.width ?? defaultViewport.width,
+      },
+    })
+
+    try {
+      const page = await context.newPage()
+      await page.goto(request.url)
+      await waitForPostReadySettle(page, request.settleMs)
+      await mkdir(path.resolve(request.outputDir), { recursive: true })
+
+      const artifactName = request.artifactName ?? captureNameFromUrl(request.url)
+      const filePath = artifactFilePath(request.outputDir, artifactName, 'png')
+
+      await page.screenshot({
+        animations: 'disabled',
+        fullPage: request.fullPage ?? false,
+        path: filePath,
+      })
+
+      return createImageArtifact({
+        artifactName,
+        filePath,
+        stage: 'browser-final',
+      })
+    }
+    finally {
+      await context.close().catch(() => {})
+    }
+  }
+  finally {
+    await browser.close()
+  }
+}
 
 export async function captureBrowserRoots(request: BrowserCaptureRequest): Promise<VishotArtifact[]> {
   const { baseUrl, closeServer } = await resolveBaseUrl(request)

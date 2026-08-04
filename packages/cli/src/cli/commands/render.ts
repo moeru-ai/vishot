@@ -2,12 +2,13 @@ import type { CaptureBrowserCliArguments } from '../capture-options'
 
 import path from 'node:path'
 
-import { captureBrowserRoots } from '@vishot/renderer-browser'
+import { captureBrowserPage, captureBrowserRoots } from '@vishot/renderer-browser'
 
-import { parseRepeatedStringOption, parseStringOption } from '../options'
+import { DEFAULT_BROWSER_HEIGHT, DEFAULT_BROWSER_WIDTH, parseNonNegativeIntegerOption, parsePositiveIntegerOption } from '../capture-options'
+import { parseBooleanOption, parseRepeatedStringOption, parseStringOption } from '../options'
 import { defineCommand } from './command'
 
-export const browserCaptureUsageMessage = 'Usage: vishot render --target browser <render-entry> --output-dir <dir>'
+export const browserCaptureUsageMessage = 'Usage: vishot render --target browser <scene-root-or-url> --output-dir <dir>'
 
 export const render = defineCommand({
   action: async (context, renderEntry, options) => {
@@ -27,6 +28,26 @@ export const render = defineCommand({
       flags: '-o, --output-dir <dir>',
     },
     {
+      description: 'Artifact name override for direct URL capture',
+      flags: '--name <name>',
+    },
+    {
+      description: 'Browser viewport width in CSS pixels',
+      flags: '--width <px>',
+    },
+    {
+      description: 'Browser viewport height in CSS pixels',
+      flags: '--height <px>',
+    },
+    {
+      description: 'Delay after page or scenario readiness in milliseconds',
+      flags: '--settle-ms <ms>',
+    },
+    {
+      description: 'Capture the complete scrollable page for direct URLs',
+      flags: '--full-page',
+    },
+    {
       description: 'Named capture root to export; may be repeated',
       flags: '--root <name>',
     },
@@ -36,6 +57,16 @@ export const render = defineCommand({
 export function parseCaptureBrowserCliArguments(argv: string[]): CaptureBrowserCliArguments {
   const { flags, input } = parseArgv(argv)
   return parseCaptureBrowserCliArgumentsFromOptions(input[0], flags, input.length)
+}
+
+function isPageUrl(value: string): boolean {
+  try {
+    const url = new URL(value)
+    return url.protocol === 'http:' || url.protocol === 'https:'
+  }
+  catch {
+    return false
+  }
 }
 
 function parseArgv(argv: readonly string[]): { flags: Record<string, unknown>, input: string[] } {
@@ -59,16 +90,21 @@ function parseArgv(argv: readonly string[]): { flags: Record<string, unknown>, i
       flags.root = roots
       index += 1
     }
-    else if (arg?.startsWith('--output-dir=')) {
-      flags.outputDir = arg.slice('--output-dir='.length)
-    }
-    else if (arg?.startsWith('--target=')) {
-      flags.target = arg.slice('--target='.length)
+    else if (arg === '--full-page') {
+      flags.fullPage = true
     }
     else if (arg?.startsWith('--root=')) {
       const roots = Array.isArray(flags.root) ? flags.root : []
       roots.push(arg.slice('--root='.length))
       flags.root = roots
+    }
+    else if (arg?.startsWith('--')) {
+      const [rawKey, inlineValue] = arg.slice(2).split('=', 2)
+      const key = rawKey.replace(/-([a-z])/gu, (_, letter: string) => letter.toUpperCase())
+      flags[key] = inlineValue ?? argv[index + 1]
+      if (inlineValue === undefined) {
+        index += 1
+      }
     }
     else if (arg !== undefined) {
       input.push(arg)
@@ -100,17 +136,52 @@ function parseCaptureBrowserCliArgumentsFromOptions(
   }
 
   return {
+    captureName: parseStringOption(flags.name),
+    fullPage: parseBooleanOption(flags.fullPage),
+    height: parsePositiveIntegerOption(flags.height, 'browser height', DEFAULT_BROWSER_HEIGHT),
     outputDir,
     renderEntry,
     rootNames: parseRepeatedStringOption(flags.root),
+    settleMs: parseNonNegativeIntegerOption(flags.settleMs, 'settle duration', 0),
+    width: parsePositiveIntegerOption(flags.width, 'browser width', DEFAULT_BROWSER_WIDTH),
   }
 }
 
 async function runCaptureBrowser(options: CaptureBrowserCliArguments, commandCwd: string): Promise<void> {
+  const outputDir = path.resolve(commandCwd, options.outputDir)
+
+  if (isPageUrl(options.renderEntry)) {
+    if (options.rootNames.length > 0) {
+      throw new Error('Direct browser page capture does not accept --root. Use --name to override the artifact name.')
+    }
+
+    await captureBrowserPage({
+      artifactName: options.captureName,
+      fullPage: options.fullPage,
+      outputDir,
+      settleMs: options.settleMs,
+      url: options.renderEntry,
+      viewport: {
+        height: options.height,
+        width: options.width,
+      },
+    })
+    return
+  }
+
+  if (options.fullPage) {
+    throw new Error('--full-page is only supported when the render entry is a direct URL.')
+  }
+
   await captureBrowserRoots({
-    outputDir: path.resolve(commandCwd, options.outputDir),
+    outputDir,
     rootNames: options.rootNames,
     routePath: '/',
     sceneAppRoot: path.resolve(commandCwd, options.renderEntry),
+    settleMs: options.settleMs,
+    viewport: {
+      height: options.height,
+      width: options.width,
+    },
   })
 }

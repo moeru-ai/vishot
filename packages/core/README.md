@@ -10,16 +10,19 @@ This package owns the reusable protocol shared by source adapters, renderers, an
 - artifact file path normalization and uniqueness checks
 - capture-root selector generation
 - browser ready signals
+- capture-name derivation from browser URLs
 - artifact transformer sequencing
 
 ## How to use
 
 ```ts
-import { captureRootSelector, markScenarioReady } from '@vishot/core'
+import { captureNameFromUrl, captureRootSelector, markScenarioReady } from '@vishot/core'
 import { createImageArtifact } from '@vishot/core/artifacts'
 ```
 
 Use `captureRootSelector(name)` to mark DOM regions for browser export, and `markScenarioReady()` when a scene has finished layout, navigation, and data loading.
+
+Use `captureNameFromUrl(url)` when direct page capture should derive a stable artifact name from a pathname or hash route.
 
 ## When to use
 

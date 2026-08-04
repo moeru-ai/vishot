@@ -13,6 +13,7 @@ interface FakeLocator {
 interface FakePage {
   goto: (url: string) => Promise<void>
   locator: (selector: string) => FakeLocator
+  screenshot: (opts: { animations: 'disabled', fullPage: boolean, path: string }) => Promise<void>
   waitForFunction: (predicate: () => boolean) => Promise<void>
   waitForTimeout: (ms: number) => Promise<void>
 }
@@ -68,6 +69,9 @@ function createFixturePage(html: string): FakePage {
         },
       }
     },
+    async screenshot(opts: { animations: 'disabled', fullPage: boolean, path: string }) {
+      await writeFile(opts.path, `fake page screenshot; fullPage=${opts.fullPage}\n`)
+    },
     async waitForFunction(predicate: () => boolean) {
       const startedAt = Date.now()
 
@@ -113,6 +117,7 @@ function createFixturePage(html: string): FakePage {
   }
 }
 
+let captureBrowserPage: typeof import('./capture').captureBrowserPage
 let captureBrowserRoots: typeof import('./capture').captureBrowserRoots
 const fixtureRoots = new Set<string>()
 
@@ -135,7 +140,7 @@ vi.mock('playwright', () => {
 })
 
 beforeAll(async () => {
-  ;({ captureBrowserRoots } = await import('./capture'))
+  ;({ captureBrowserPage, captureBrowserRoots } = await import('./capture'))
 })
 
 async function cleanupFixtureRoots(): Promise<void> {
@@ -348,5 +353,35 @@ describe('captureBrowserRoots', () => {
     })).rejects.toThrow('both resolve to')
 
     await expect(access(path.join(outputDir, 'intro-chat-window.png'))).resolves.toBeUndefined()
+  }, 120000)
+})
+
+describe('captureBrowserPage', () => {
+  it('captures a direct URL without capture-root markup', async () => {
+    const sceneAppRoot = await createViteSceneFixture()
+    const outputDir = path.join(sceneAppRoot, 'artifacts', 'direct-page')
+    const server = await import('./vite-server').then(({ startSceneViteServer }) => startSceneViteServer(sceneAppRoot))
+
+    try {
+      const artifact = await captureBrowserPage({
+        fullPage: true,
+        outputDir,
+        settleMs: 1,
+        url: server.baseUrl,
+        viewport: {
+          height: 844,
+          width: 390,
+        },
+      })
+
+      expect(artifact.artifactName).toBe('home')
+      expect(artifact.filePath).toBe(path.join(outputDir, 'home.png'))
+      expect(artifact.kind).toBe('image')
+      expect(artifact.stage).toBe('browser-final')
+      await expect(access(artifact.filePath)).resolves.toBeUndefined()
+    }
+    finally {
+      await server.close()
+    }
   }, 120000)
 })

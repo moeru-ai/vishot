@@ -10,6 +10,7 @@ This package runs Electron capture scenarios and writes raw application screensh
 - `loadScenarioModule()` for loading scenario files
 - `createScenarioContext()` for capture helpers bound to an Electron app
 - `capturePage()` for page screenshots
+- `findWindow()` for generic title/URL-based window discovery
 
 ## How to use
 
@@ -34,6 +35,19 @@ pnpm exec vishot capture \
   --app-entrypoint ./dist/main.js \
   --output-dir ./screenshots/raw
 ```
+
+For a direct window capture without a scenario module:
+
+```bash
+pnpm exec vishot capture \
+  --target electron \
+  --app-entrypoint ./dist/main.js \
+  --window-url '#/' \
+  --settle-ms 1000 \
+  --output-dir ./screenshots/main
+```
+
+Pass `--electron-executable` when the package manager layout prevents Playwright from discovering the consumer project's Electron binary.
 
 ## When to use
 

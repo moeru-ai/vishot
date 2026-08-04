@@ -36,12 +36,39 @@ pnpm exec vishot capture \
   --output-dir ./screenshots/raw
 ```
 
-Use `vishot render` when a browser render entry exposes Vishot capture roots and needs final composed artifacts:
+For a direct Electron window capture, omit the scenario and select a window by URL or title. The artifact name defaults to the window title, then its URL route:
+
+```bash
+pnpm exec vishot capture \
+  --target electron \
+  --app-entrypoint ./dist/main.js \
+  --window-url '#/' \
+  --settle-ms 1000 \
+  --output-dir ./screenshots/main
+```
+
+Playwright normally discovers the consumer project's Electron binary. In strict or isolated package layouts, pass `--electron-executable /absolute/path/to/electron` explicitly.
+
+Capture any locally served web or Capacitor route directly. The artifact name defaults to the final URL path or hash-route segment:
 
 ```bash
 pnpm exec vishot render \
   --target browser \
-  ./capture/render-entry.ts \
+  http://127.0.0.1:5173/settings \
+  --width 1440 \
+  --height 900 \
+  --settle-ms 1000 \
+  --output-dir ./screenshots/settings
+```
+
+Direct URL capture does not click or otherwise interact with the page. Use a product-owned scenario when navigation or state setup requires actions.
+
+Use `vishot render` with a Vite scene app directory when the page exposes Vishot capture roots and needs final composed artifacts:
+
+```bash
+pnpm exec vishot render \
+  --target browser \
+  ./capture/scene-app \
   --output-dir ./screenshots/final
 ```
 
@@ -50,7 +77,7 @@ Filter browser capture roots by name when a render entry exposes multiple output
 ```bash
 pnpm exec vishot render \
   --target browser \
-  ./capture/render-entry.ts \
+  ./capture/scene-app \
   --output-dir ./screenshots/final \
   --root hero \
   --root settings
