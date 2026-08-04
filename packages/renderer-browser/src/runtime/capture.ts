@@ -224,11 +224,13 @@ async function resolveBaseUrl(request: BrowserCaptureRequest): Promise<{ baseUrl
 }
 
 async function waitForPostReadySettle(page: Page, settleMs: number | undefined): Promise<void> {
-  if (!settleMs || settleMs <= 0) {
-    return
-  }
+  await page.waitForLoadState('domcontentloaded')
 
-  await page.waitForTimeout(settleMs)
+  if (settleMs && settleMs > 0) {
+    await page.waitForTimeout(settleMs)
+    // A Vite reload may start during the settle window. Never capture its transient document.
+    await page.waitForLoadState('domcontentloaded')
+  }
 }
 
 async function waitForScenarioReady(page: Page): Promise<void> {

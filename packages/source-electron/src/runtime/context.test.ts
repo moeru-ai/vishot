@@ -16,6 +16,7 @@ describe('createScenarioContext', () => {
     const electronApp = {} as never
     const page = {} as never
     const context = createScenarioContext(electronApp, '/tmp/output', {
+      settleMs: 10000,
       transformers: [defaultTransformer],
     })
 
@@ -30,6 +31,7 @@ describe('createScenarioContext', () => {
       page,
       expect.objectContaining({
         fullPage: true,
+        settleMs: 10000,
         transformers: [defaultTransformer, perCaptureTransformer],
       }),
     )

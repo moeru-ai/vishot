@@ -15,6 +15,14 @@ export async function capturePage(
 ): Promise<VishotArtifact[]> {
   const filePath = artifactFilePath(outputDir, name, 'png')
 
+  await page.waitForLoadState('domcontentloaded')
+
+  if (options?.settleMs && options.settleMs > 0) {
+    await page.waitForTimeout(options.settleMs)
+    // A Vite reload may start during the settle window. Never capture its transient document.
+    await page.waitForLoadState('domcontentloaded')
+  }
+
   await mkdir(outputDir, { recursive: true })
   await page.screenshot({
     animations: 'disabled',

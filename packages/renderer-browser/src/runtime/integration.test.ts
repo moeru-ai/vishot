@@ -15,6 +15,7 @@ interface FakePage {
   locator: (selector: string) => FakeLocator
   screenshot: (opts: { animations: 'disabled', fullPage: boolean, path: string }) => Promise<void>
   waitForFunction: (predicate: () => boolean) => Promise<void>
+  waitForLoadState: (state: 'domcontentloaded') => Promise<void>
   waitForTimeout: (ms: number) => Promise<void>
 }
 
@@ -110,6 +111,11 @@ function createFixturePage(html: string): FakePage {
       }
 
       throw new Error('Timed out waiting for scene readiness')
+    },
+    async waitForLoadState(state: 'domcontentloaded') {
+      if (state !== 'domcontentloaded') {
+        throw new Error(`Unsupported load state: ${state}`)
+      }
     },
     async waitForTimeout(ms: number) {
       await new Promise(resolve => setTimeout(resolve, ms))

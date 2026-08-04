@@ -59,7 +59,7 @@ export const capture = defineCommand({
       flags: '--window-title <substring>',
     },
     {
-      description: 'Delay before built-in window capture in milliseconds',
+      description: 'Delay before capture in milliseconds',
       flags: '--settle-ms <ms>',
     },
     {
@@ -206,15 +206,12 @@ async function runCaptureElectron(options: CaptureElectronCliArguments, commandC
   })
 
   try {
-    const context = createScenarioContext(
-      electronApp,
-      resolvedOutputDir,
-      options.format === 'avif'
-        ? {
-            transformers: [createAvifTransformer(options.avif ?? defaultAvifCaptureOptions())],
-          }
+    const context = createScenarioContext(electronApp, resolvedOutputDir, {
+      settleMs: options.settleMs,
+      transformers: options.format === 'avif'
+        ? [createAvifTransformer(options.avif ?? defaultAvifCaptureOptions())]
         : undefined,
-    )
+    })
     if (loadedScenario) {
       await loadedScenario.scenario.run(context)
       return
@@ -224,12 +221,6 @@ async function runCaptureElectron(options: CaptureElectronCliArguments, commandC
       title: options.windowTitle,
       url: options.windowUrl,
     })
-    await page.waitForLoadState('domcontentloaded')
-
-    if (options.settleMs > 0) {
-      await page.waitForTimeout(options.settleMs)
-    }
-
     const title = (await page.title()).trim()
     const captureName = options.captureName
       ?? (title.length > 0 ? title : captureNameFromUrl(page.url()))

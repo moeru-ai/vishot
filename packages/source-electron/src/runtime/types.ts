@@ -3,6 +3,8 @@ import type { ElectronApplication, Page } from 'playwright'
 
 export interface CaptureOptions {
   fullPage?: boolean
+  /** Stable time after renderer readiness before capture. @default 0 */
+  settleMs?: number
   transformers?: ArtifactTransformer[]
 }
 

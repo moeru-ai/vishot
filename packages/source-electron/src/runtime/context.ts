@@ -30,6 +30,7 @@ function mergeCaptureOptions(defaultOptions?: CaptureOptions, options?: CaptureO
 
   return {
     fullPage: options?.fullPage ?? defaultOptions?.fullPage,
+    settleMs: options?.settleMs ?? defaultOptions?.settleMs,
     transformers: transformers.length > 0 ? transformers : undefined,
   }
 }

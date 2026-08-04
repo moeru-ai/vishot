@@ -142,6 +142,18 @@ describe('unified vishot cli argument parsing', () => {
     })
   })
 
+  it('does not add a browser capture delay by default', () => {
+    expect(parseCaptureBrowserCliArguments([
+      '--target',
+      'browser',
+      'http://127.0.0.1:5173/settings',
+      '--output-dir',
+      outputDir,
+    ])).toEqual(expect.objectContaining({
+      settleMs: 0,
+    }))
+  })
+
   it('uses unified command names in validation errors', () => {
     expect(() => parseCaptureElectronCliArguments([
       '--target',
