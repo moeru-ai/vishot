@@ -298,6 +298,9 @@ importers:
       playwright:
         specifier: 'catalog:'
         version: 1.61.1
+      tsx:
+        specifier: 'catalog:'
+        version: 4.23.1
     devDependencies:
       '@types/node':
         specifier: 'catalog:'

@@ -7,6 +7,7 @@ import { resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 import { errorMessageFrom } from '@moeru/std'
+import { register } from 'tsx/esm/api'
 
 export interface LoadedScenarioModule {
   modulePath: string
@@ -21,12 +22,16 @@ export async function loadScenarioModule(scenarioPath: string): Promise<LoadedSc
   })
 
   let moduleNamespace: { default?: unknown }
+  const unregisterTypeScriptLoader = register()
 
   try {
     moduleNamespace = await import(pathToFileURL(modulePath).href)
   }
   catch (error) {
     throw new Error(`Failed to load scenario module at ${modulePath}: ${errorMessageFrom(error) ?? 'Unknown module loading error'}`)
+  }
+  finally {
+    await unregisterTypeScriptLoader()
   }
 
   if (!isElectronScenario(moduleNamespace.default)) {
