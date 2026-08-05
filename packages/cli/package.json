@@ -1,7 +1,7 @@
 {
   "name": "@vishot/cli",
   "type": "module",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Unified command line interface for Vishot capture adapters.",
   "license": "MIT",
   "homepage": "https://github.com/moeru-ai/vishot",
