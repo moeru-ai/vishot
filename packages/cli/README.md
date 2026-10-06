@@ -26,6 +26,19 @@ Install the CLI in a project that owns screenshot scenarios:
 pnpm add -D @vishot/cli
 ```
 
+Vishot also ships agent skills that document its browser, Electron, Capacitor,
+and local-file capture workflows. Install them directly from the repository:
+
+```bash
+npx skills add moeru-ai/vishot
+# or
+pnpm dlx skills add moeru-ai/vishot
+```
+
+Projects using [`skills-npm`](https://github.com/antfu/skills-npm) discover the
+same skills from the installed `@vishot/cli` package, keeping the instructions
+and executable on the same package version.
+
 Use `vishot capture` when a scenario needs to collect source screenshots from a running application. The Electron adapter launches the application through Playwright Electron and writes raw capture artifacts:
 
 ```bash

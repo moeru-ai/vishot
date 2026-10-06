@@ -20,7 +20,8 @@
     "vishot": "./dist/bin/index.mjs"
   },
   "files": [
-    "dist"
+    "dist",
+    "skills"
   ],
   "publishConfig": {
     "access": "public"

@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Use Vishot with Input Files'
+  short_description: 'Capture deterministic file-input states'
+  default_prompt: 'Use $use-vishot-with-input-file to prepare and capture this local file-input state.'
