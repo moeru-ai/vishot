@@ -1,7 +1,7 @@
 {
   "name": "@vishot/core",
   "type": "module",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Shared Vishot capture contracts and artifact helpers.",
   "license": "MIT",
   "homepage": "https://github.com/moeru-ai/vishot",

@@ -1,7 +1,7 @@
 {
   "name": "@vishot/renderer-browser",
   "type": "module",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Playwright browser renderer for Vishot capture roots.",
   "license": "MIT",
   "homepage": "https://github.com/moeru-ai/vishot",
