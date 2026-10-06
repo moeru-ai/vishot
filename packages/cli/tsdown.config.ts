@@ -3,6 +3,12 @@ import { defineConfig } from 'tsdown'
 export default defineConfig([
   {
     clean: true,
+    copy: [
+      {
+        from: '../../skills',
+        to: 'dist',
+      },
+    ],
     deps: {
       neverBundle: [
         '@vishot/core',
