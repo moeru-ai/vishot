@@ -2,6 +2,12 @@
 
 Composable screenshot tooling for source capture, browser rendering, and desktop mockup composition.
 
+[![npm version][npmx-version-src]][npmx-version-href]
+[![npm downloads][npmx-downloads-src]][npmx-downloads-href]
+[![bundle][bundle-src]][bundle-href]
+[![License][license-src]][license-href]
+[![JSDocs][jsdocs-src]][jsdocs-href]
+
 Vishot separates screenshot production into reusable source adapters, browser renderers, and mockup primitives. Product-specific scenario automation belongs in the product repository. Vishot owns shared capture protocols, artifact behavior, renderers, and generic visual shells.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -165,3 +171,14 @@ Vishot packages are early and may change while the capture protocol settles.
 ## License
 
 MIT
+
+[npmx-version-src]: https://npmx.dev/api/registry/badge/version/@vishot/core
+[npmx-version-href]: https://npmx.dev/@vishot/core
+[npmx-downloads-src]: https://npmx.dev/api/registry/badge/downloads-month/@vishot/core
+[npmx-downloads-href]: https://npmx.dev/@vishot/core
+[bundle-src]: https://npmx.dev/api/registry/badge/size/@vishot/core
+[bundle-href]: https://bundlephobia.com/result?p=@vishot/core
+[license-src]: https://npmx.dev/api/registry/badge/license/@vishot/core
+[license-href]: https://github.com/moeru-ai/vishot/blob/main/LICENSE
+[jsdocs-src]: https://img.shields.io/badge/jsdocs-reference-080f12?style=flat&colorA=080f12&colorB=1fa669
+[jsdocs-href]: https://www.jsdocs.io/package/@vishot/core
